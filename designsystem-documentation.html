@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System — Documentation</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <style>
+    /* ─── Design Tokens ──────────────────────────── */
+    :root {
+      --brand-100: #FEE4E0;
+      --brand-300: #FCAFA3;
+      --brand-500: #FA6048;
+      --brand-700: #D0503C;
+      --brand-800: #A64030;
+
+      --clay-100: #F7EFEE;
+      --clay-300: #DCBAB4;
+      --clay-500: #BA756A;
+      --clay-700: #9B6158;
+      --clay-800: #7C4E46;
+
+      --mint-100: #DBFAEC;
+      --mint-300: #A6F4D0;
+      --mint-500: #5FECAC;
+      --mint-700: #56AA84;
+      --mint-800: #34835F;
+
+      --grey-50:  #E8E6E6;
+      --grey-100: #D1CDCD;
+      --grey-200: #BAB5B4;
+      --grey-300: #A39C9B;
+      --grey-400: #8C8382;
+      --grey-500: #756B69;
+      --grey-600: #615957;
+      --grey-700: #4E4746;
+      --grey-800: #3A3534;
+      --grey-900: #272323;
+
+      --error-100: #F1BBB6;
+      --error-300: #E4776D;
+      --error-500: #D73325;
+      --error-700: #8F2218;
+      --error-900: #57150F;
+
+      --warning-100: #FBE8C2;
+      --warning-300: #F8D286;
+      --warning-500: #F5BC4A;
+      --warning-700: #A37D31;
+      --warning-900: #5A451B;
+
+      --info-100: #B0D0F2;
+      --info-300: #61A1E5;
+      --info-500: #1373D8;
+      --info-700: #0C4C90;
+      --info-900: #072F59;
+
+      --success-100: #B5DFD1;
+      --success-300: #6BC0A4;
+      --success-500: #21A177;
+      --success-700: #166B4F;
+      --success-900: #0B3527;
+
+      --font-sans: 'Neulis Neue', system-ui, sans-serif;
+      --font-mono: 'SFMono-Regular', 'Menlo', 'Consolas', monospace;
+    }
+
+    /* ─── Reset & Base ───────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.6;
+      background: #FAFAF9;
+      color: var(--grey-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── Layout ─────────────────────────────────── */
+    .sidebar {
+      width: 256px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--grey-50);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 0 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand {
+      padding: 0 24px 28px;
+      border-bottom: 1px solid var(--grey-50);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-brand .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-brand .logo-dot {
+      width: 28px;
+      height: 28px;
+      background: var(--brand-500);
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--grey-900);
+      line-height: 1.2;
+    }
+
+    .sidebar-brand .logo-sub {
+      font-size: 11px;
+      color: var(--grey-400);
+      font-weight: 400;
+    }
+
+    .sidebar-meta {
+      font-size: 11px;
+      color: var(--grey-400);
+      margin-top: 10px;
+    }
+
+    .sidebar nav { flex: 1; padding: 0 12px; }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      padding: 16px 12px 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--grey-600);
+      transition: background .12s, color .12s;
+    }
+
+    .nav-link:hover { background: var(--grey-50); color: var(--grey-900); }
+    .nav-link.active { background: var(--brand-100); color: var(--brand-700); }
+
+    .nav-link .nav-icon {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .nav-sub-link {
+      display: block;
+      padding: 5px 12px 5px 38px;
+      font-size: 13px;
+      color: var(--grey-500);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background .12s, color .12s;
+    }
+
+    .nav-sub-link:hover { background: var(--grey-50); color: var(--grey-800); }
+
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 56px 64px 96px;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    /* ─── Page Header ────────────────────────────── */
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .page-header h1 {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--grey-900);
+    }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--grey-500);
+      max-width: 520px;
+    }
+
+    .figma-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--brand-700);
+      text-decoration: none;
+      background: var(--brand-100);
+      padding: 6px 12px;
+      border-radius: 999px;
+      transition: background .12s;
+    }
+
+    .figma-link:hover { background: var(--brand-300); }
+
+    /* ─── Section ────────────────────────────────── */
+    .section {
+      scroll-margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--grey-50);
+    }
+
+    .section-number {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-500);
+      background: var(--brand-100);
+      padding: 2px 8px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--grey-900);
+    }
+
+    .subsection { scroll-margin-top: 32px; display: flex; flex-direction: column; gap: 24px; }
+
+    .subsection h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--grey-800);
+    }
+
+    .subsection h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+    }
+
+    .desc {
+      font-size: 14px;
+      color: var(--grey-500);
+      max-width: 600px;
+    }
+
+    /* ─── Color Palettes ─────────────────────────── */
+    .palette-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .palette-group-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      margin-bottom: 12px;
+    }
+
+    .palette-row {
+      display: flex;
+      gap: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+
+    .swatch {
+      flex: 1;
+      height: 80px;
+      position: relative;
+      cursor: pointer;
+      transition: flex .2s ease;
+    }
+
+    .swatch:hover { flex: 1.6; }
+
+    .swatch-label {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .15s;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .swatch:hover .swatch-label { opacity: 1; }
+
+    .swatch-light .swatch-label  { background: rgba(0,0,0,.15); color: #fff; }
+    .swatch-dark  .swatch-label  { background: rgba(255,255,255,.25); color: #fff; }
+    .swatch-mid   .swatch-label  { background: rgba(0,0,0,.12); color: #fff; }
+
+    /* Semantic token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .token-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      border-bottom: 1px solid var(--grey-50);
+    }
+
+    .token-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--grey-50);
+      vertical-align: middle;
+    }
+
+    .token-table tr:last-child td { border-bottom: none; }
+
+    .token-table tr:hover td { background: var(--grey-50); }
+
+    .color-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    .token-name {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--grey-700);
+      background: var(--grey-50);
+      padding: 2px 7px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background .1s;
+    }
+
+    .token-name:hover { background: var(--brand-100); color: var(--brand-700); }
+
+    .hex-value {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--grey-500);
+    }
+
+    .usage-note {
+      font-size: 13px;
+      color: var(--grey-500);
+    }
+
+    /* ─── Dimension Scale ────────────────────────── */
+    .dim-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dim-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--grey-50);
+    }
+
+    .dim-row:last-child { border-bottom: none; }
+
+    .dim-token {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--grey-600);
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .dim-px {
+      font-size: 13px;
+      color: var(--grey-500);
+      width: 60px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .dim-bar-wrap { flex: 1; height: 20px; display: flex; align-items: center; }
+
+    .dim-bar {
+      height: 8px;
+      background: var(--brand-300);
+      border-radius: 4px;
+      min-width: 2px;
+    }
+
+    /* ─── Spacing & Radius ───────────────────────── */
+    .spacing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .spacing-card {
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .spacing-preview {
+      background: var(--brand-100);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .spacing-card-label {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--grey-600);
+    }
+
+    .spacing-card-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--grey-900);
+    }
+
+    .spacing-card-usage {
+      font-size: 11.5px;
+      color: var(--grey-400);
+    }
+
+    /* Radius */
+    .radius-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .radius-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      padding: 20px;
+      border-radius: 12px;
+      min-width: 110px;
+    }
+
+    .radius-preview {
+      width: 56px;
+      height: 56px;
+      background: var(--brand-500);
+      opacity: .7;
+    }
+
+    .radius-card-label {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--grey-600);
+      text-align: center;
+    }
+
+    .radius-card-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--grey-700);
+    }
+
+    /* Border width */
+    .border-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--grey-50);
+    }
+
+    .border-preview-wrap { width: 80px; }
+
+    .border-preview {
+      width: 80px;
+      height: 40px;
+      border-radius: 8px;
+      border-style: solid;
+      border-color: var(--grey-900);
+    }
+
+    .border-info { flex: 1; }
+
+    .border-token {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--grey-600);
+    }
+
+    .border-desc {
+      font-size: 13px;
+      color: var(--grey-400);
+      margin-top: 2px;
+    }
+
+    /* ─── Layout ─────────────────────────────────── */
+    .breakpoint-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .bp-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .bp-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--brand-100);
+      color: var(--brand-700);
+      padding: 4px 10px;
+      border-radius: 999px;
+      width: 120px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .bp-range {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--grey-700);
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .bp-label {
+      font-size: 13.5px;
+      color: var(--grey-500);
+    }
+
+    .bp-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: var(--grey-50);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bp-bar {
+      height: 100%;
+      background: var(--brand-500);
+      border-radius: 3px;
+    }
+
+    .grid-demo {
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .grid-demo-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--grey-400);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+    }
+
+    .grid-vis {
+      display: flex;
+      gap: 0;
+    }
+
+    .grid-col {
+      flex: 1;
+      height: 48px;
+      background: var(--brand-100);
+      border: 1px solid var(--brand-300);
+      border-radius: 4px;
+    }
+
+    .grid-gutter { flex-shrink: 0; background: transparent; }
+
+    /* ─── Typography ─────────────────────────────── */
+    .type-scale { display: flex; flex-direction: column; gap: 2px; }
+
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--grey-50);
+    }
+
+    .type-row:last-child { border-bottom: none; }
+
+    .type-meta {
+      width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .type-meta-token {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--grey-400);
+    }
+
+    .type-meta-specs {
+      font-size: 12px;
+      color: var(--grey-500);
+    }
+
+    .type-preview { flex: 1; color: var(--grey-900); }
+
+    .type-display-desktop  { font-size: 52px; font-weight: 700; line-height: 1.1; }
+    .type-display-mobile   { font-size: 40px; font-weight: 700; line-height: 1.1; }
+    .type-h1-desktop       { font-size: 40px; font-weight: 700; line-height: 1.1; }
+    .type-h1-mobile        { font-size: 32px; font-weight: 700; line-height: 1.125; }
+    .type-h2-desktop       { font-size: 28px; font-weight: 700; line-height: 1.4; }
+    .type-h2-mobile        { font-size: 22px; font-weight: 700; line-height: 1.45; }
+    .type-h3-desktop       { font-size: 22px; font-weight: 800; line-height: 1.375; }
+    .type-h3-mobile        { font-size: 20px; font-weight: 800; line-height: 1.45; }
+
+    .type-body-large-thin  { font-size: 18px; font-weight: 300; line-height: 1.55; }
+    .type-body-large-reg   { font-size: 18px; font-weight: 400; line-height: 1.55; }
+    .type-body-large-semi  { font-size: 18px; font-weight: 600; line-height: 1.55; }
+    .type-body-large-bold  { font-size: 18px; font-weight: 700; line-height: 1.55; }
+
+    .type-body-med-thin    { font-size: 15px; font-weight: 300; line-height: 1.55; }
+    .type-body-med-reg     { font-size: 15px; font-weight: 400; line-height: 1.55; }
+    .type-body-med-semi    { font-size: 15px; font-weight: 600; line-height: 1.55; }
+    .type-body-med-bold    { font-size: 15px; font-weight: 700; line-height: 1.55; }
+
+    .type-body-sm-thin     { font-size: 13px; font-weight: 300; line-height: 1.55; }
+    .type-body-sm-reg      { font-size: 13px; font-weight: 400; line-height: 1.55; }
+    .type-body-sm-semi     { font-size: 13px; font-weight: 600; line-height: 1.55; }
+    .type-body-sm-bold     { font-size: 13px; font-weight: 700; line-height: 1.55; }
+
+    .type-label-lg-reg     { font-size: 18px; font-weight: 500; line-height: 1.55; }
+    .type-label-lg-bold    { font-size: 18px; font-weight: 700; line-height: 1.55; }
+    .type-label-md-reg     { font-size: 15px; font-weight: 500; line-height: 1.55; }
+    .type-label-md-bold    { font-size: 15px; font-weight: 700; line-height: 1.55; }
+    .type-label-sm-reg     { font-size: 13px; font-weight: 500; line-height: 1.55; }
+    .type-label-sm-bold    { font-size: 13px; font-weight: 700; line-height: 1.55; }
+
+    .type-caption-lg       { font-size: 13px; font-weight: 400; line-height: 1.4; color: var(--grey-500); }
+    .type-caption-md       { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--grey-500); }
+    .type-caption-sm       { font-size: 11px; font-weight: 400; line-height: 1.4; color: var(--grey-500); }
+
+    .type-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--grey-700);
+      padding: 20px 0 12px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--grey-100);
+    }
+
+    /* ─── Code block ─────────────────────────────── */
+    .code-block {
+      background: var(--grey-900);
+      color: #E8E6E6;
+      border-radius: 12px;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+
+    .code-block .comment { color: var(--grey-500); }
+    .code-block .property { color: var(--mint-300); }
+    .code-block .value { color: var(--brand-300); }
+
+    /* ─── Semantic token blocks ───────────────────── */
+    .semantic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .semantic-card {
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .semantic-card-header {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      background: var(--grey-50);
+      border-bottom: 1px solid var(--grey-100);
+    }
+
+    /* ─── Toast ──────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--grey-900);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ─── Utilities ──────────────────────────────── */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: .03em;
+    }
+
+    .tag-brand   { background: var(--brand-100);  color: var(--brand-700); }
+    .tag-success { background: var(--success-100); color: var(--success-700); }
+    .tag-warning { background: var(--warning-100); color: var(--warning-700); }
+    .tag-error   { background: var(--error-100);   color: var(--error-700); }
+    .tag-info    { background: var(--info-100);    color: var(--info-700); }
+    .tag-mint    { background: var(--mint-100);    color: var(--mint-800); }
+    .tag-clay    { background: var(--clay-100);    color: var(--clay-800); }
+
+    .divider {
+      height: 1px;
+      background: var(--grey-50);
+      margin: 48px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Sidebar ──────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <a class="logo" href="#">
+        <div class="logo-dot"></div>
+        <div>
+          <div class="logo-text">Design System</div>
+          <div class="logo-sub">Foundations v1.0</div>
+        </div>
+      </a>
+      <div class="sidebar-meta">Neulis Neue · 2026-03-17</div>
+    </div>
+
+    <nav>
+      <div class="nav-section-label">Foundations</div>
+
+      <a class="nav-link" href="#couleurs">
+        <span class="nav-icon">🎨</span> Colors
+      </a>
+      <a class="nav-sub-link" href="#palette-primitive">Primitive palette</a>
+      <a class="nav-sub-link" href="#tokens-semantiques">Semantic tokens</a>
+
+      <a class="nav-link" href="#dimensions">
+        <span class="nav-icon">📐</span> Dimensions
+      </a>
+
+      <a class="nav-link" href="#espacement">
+        <span class="nav-icon">⬜</span> Spacing, radius & borders
+      </a>
+      <a class="nav-sub-link" href="#spacing">Spacing</a>
+      <a class="nav-sub-link" href="#radius">Radius</a>
+      <a class="nav-sub-link" href="#borders">Borders</a>
+
+      <a class="nav-link" href="#layout">
+        <span class="nav-icon">🗂</span> Layout
+      </a>
+      <a class="nav-sub-link" href="#breakpoints">Breakpoints</a>
+      <a class="nav-sub-link" href="#grilles">Grids</a>
+
+      <a class="nav-link" href="#typographie">
+        <span class="nav-icon">Aa</span> Typography
+      </a>
+      <a class="nav-sub-link" href="#headings">Headings</a>
+      <a class="nav-sub-link" href="#body">Body</a>
+      <a class="nav-sub-link" href="#labels">Labels</a>
+      <a class="nav-sub-link" href="#captions">Captions</a>
+
+      <div class="nav-section-label">Resources</div>
+      <a class="nav-link" href="#css-vars">
+        <span class="nav-icon">{}</span> CSS Variables
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ─── Main ────────────────────────────────────── -->
+  <main>
+
+    <header class="page-header">
+      <h1>Design System<br/>Documentation</h1>
+      <p>Foundations: colors, typography, dimensions, spacing and layout grid.</p>
+      <a class="figma-link" href="https://www.figma.com/design/kmPsAmMm4VdXPUCIg8ov5R/Design-System" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 28.5A9.5 9.5 0 1128.5 19 9.51 9.51 0 0119 28.5z" fill="#1ABCFE"/><path d="M9.5 57A9.5 9.5 0 0119 47.5V57z" fill="#0ACF83"/><path d="M0 38a9.5 9.5 0 019.5-9.5H19V38a9.5 9.5 0 01-19 0z" fill="#A259FF"/><path d="M0 19A9.5 9.5 0 019.5 9.5H19V28.5H9.5A9.5 9.5 0 010 19z" fill="#F24E1E"/><path d="M19 0h9.5A9.5 9.5 0 0128.5 19H19V0z" fill="#FF7262"/></svg>
+        Open in Figma
+      </a>
+    </header>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 1. COLORS                                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="couleurs">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2>Colors</h2>
+      </div>
+      <p class="desc">The palette is organized into <strong>primitive colors</strong> (raw palette) and <strong>semantic tokens</strong> (contextualized usage). Always prefer semantic tokens in code.</p>
+
+      <!-- Primitive palette -->
+      <div class="subsection" id="palette-primitive">
+        <h3>1.1 Primitive palette</h3>
+
+        <!-- Brand -->
+        <div class="palette-group">
+          <div class="palette-group-title">Brand <span class="tag tag-brand">Main color</span></div>
+          <div class="palette-row">
+            <div class="swatch swatch-light" style="background:#FEE4E0" onclick="copyToken('color/brand/100', '#FEE4E0')">
+              <span class="swatch-label" style="color:#A64030">100</span>
+            </div>
+            <div class="swatch swatch-light" style="background:#FCAFA3" onclick="copyToken('color/brand/300', '#FCAFA3')">
+              <span class="swatch-label" style="color:#A64030">300</span>
+            </div>
+            <div class="swatch swatch-dark" style="background:#FA6048" onclick="copyToken('color/brand/500', '#FA6048')">
+              <span class="swatch-label">500 ★</span>
+            </div>
+            <div class="swatch swatch-dark" style="background:#D0503C" onclick="copyToken('color/brand/700', '#D0503C')">
+              <span class="swatch-label">700</span>
+            </div>
+            <div class="swatch swatch-dark" style="background:#A64030" onclick="copyToken('color/brand/800', '#A64030')">
+              <span class="swatch-label">800</span>
+            </div>
+          </div>
+          <table class="token-table" style="margin-top:12px">
+            <thead><tr><th>Token</th><th>Hex</th><th>Usage</th></tr></thead>
+            <tbody>
+              <tr><td><span class="token-name" onclick="copyToken('color/brand/100','#FEE4E0')">color/brand/100</span></td><td><span class="hex-value">#FEE4E0</span></td><td class="usage-note">Light backgrounds, subtle states</td></tr>
+              <tr><td><span class="token-name" onclick="copyToken('color/brand/300','#FCAFA3')">color/brand/300</span></td><td><span class="hex-value">#FCAFA3</span></td><td class="usage-note">Badges, chips, soft hover</td></tr>
+              <tr><td><span class="token-name" onclick="copyToken('color/brand/500','#FA6048')">color/brand/500</span></td><td><span class="hex-value">#FA6048</span></td><td class="usage-note"><strong>Main color — CTA, highlights</strong></td></tr>
+              <tr><td><span class="token-name" onclick="copyToken('color/brand/700','#D0503C')">color/brand/700</span></td><td><span class="hex-value">#D0503C</span></td><td class="usage-note">Hover/pressed state</td></tr>
+              <tr><td><span class="token-name" onclick="copyToken('color/brand/800','#A64030')">color/brand/800</span></td><td><span class="hex-value">#A64030</span></td><td class="usage-note">Active/deep focus state</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Clay -->
+        <div class="palette-group">
+          <div class="palette-group-title">Accent — Clay <span class="tag tag-clay">Terracotta</span></div>
+          <div class="palette-row">
+            <div class="swatch swatch-light" style="background:#F7EFEE" onclick="copyToken('color/clay/100','#F7EFEE')"><span class="swatch-label" style="color:#7C4E46">100</span></div>
+            <div class="swatch swatch-light" style="background:#DCBAB4" onclick="copyToken('color/clay/300','#DCBAB4')"><span class="swatch-label" style="color:#7C4E46">300</span></div>
+            <div class="swatch swatch-dark"  style="background:#BA756A" onclick="copyToken('color/clay/500','#BA756A')"><span class="swatch-label">500</span></div>
+            <div class="swatch swatch-dark"  style="background:#9B6158" onclick="copyToken('color/clay/700','#9B6158')"><span class="swatch-label">700</span></div>
+            <div class="swatch swatch-dark"  style="background:#7C4E46" onclick="copyToken('color/clay/800','#7C4E46')"><span class="swatch-label">800</span></div>
+          </div>
+          <p class="desc" style="margin-top:10px">Warm terracotta tone used to enrich the palette without competing with the main color.</p>
+        </div>
+
+        <!-- Mint Glow -->
+        <div class="palette-group">
+          <div class="palette-group-title">Accent — Mint Glow <span class="tag tag-mint">Mint green</span></div>
+          <div class="palette-row">
+            <div class="swatch swatch-light" style="background:#DBFAEC" onclick="copyToken('color/mintglow/100','#DBFAEC')"><span class="swatch-label" style="color:#34835F">100</span></div>
+            <div class="swatch swatch-light" style="background:#A6F4D0" onclick="copyToken('color/mintglow/300','#A6F4D0')"><span class="swatch-label" style="color:#34835F">300</span></div>
+            <div class="swatch swatch-dark"  style="background:#5FECAC" onclick="copyToken('color/mintglow/500','#5FECAC')"><span class="swatch-label" style="color:#0b3527">500 ★</span></div>
+            <div class="swatch swatch-dark"  style="background:#56AA84" onclick="copyToken('color/mintglow/700','#56AA84')"><span class="swatch-label">700</span></div>
+            <div class="swatch swatch-dark"  style="background:#34835F" onclick="copyToken('color/mintglow/800','#34835F')"><span class="swatch-label">800</span></div>
+          </div>
+          <p class="desc" style="margin-top:10px">Vivid mint accent for success indicators, badges and secondary accent elements.</p>
+        </div>
+
+        <!-- Grey -->
+        <div class="palette-group">
+          <div class="palette-group-title">Grey — Neutrals</div>
+          <div class="palette-row">
+            <div class="swatch swatch-light" style="background:#E8E6E6"><span class="swatch-label" style="color:#272323">50</span></div>
+            <div class="swatch swatch-light" style="background:#D1CDCD"><span class="swatch-label" style="color:#272323">100</span></div>
+            <div class="swatch swatch-light" style="background:#BAB5B4"><span class="swatch-label" style="color:#272323">200</span></div>
+            <div class="swatch swatch-mid"   style="background:#A39C9B"><span class="swatch-label">300</span></div>
+            <div class="swatch swatch-mid"   style="background:#8C8382"><span class="swatch-label">400</span></div>
+            <div class="swatch swatch-dark"  style="background:#756B69"><span class="swatch-label">500</span></div>
+            <div class="swatch swatch-dark"  style="background:#615957"><span class="swatch-label">600</span></div>
+            <div class="swatch swatch-dark"  style="background:#4E4746"><span class="swatch-label">700</span></div>
+            <div class="swatch swatch-dark"  style="background:#3A3534"><span class="swatch-label">800</span></div>
+            <div class="swatch swatch-dark"  style="background:#272323"><span class="swatch-label">900</span></div>
+          </div>
+          <p class="desc" style="margin-top:10px">Warm neutrals (slight brown-terracotta tint). Used for text, borders, backgrounds and dividers.</p>
+        </div>
+
+        <!-- Semantic colors -->
+        <h4>Semantic colors</h4>
+        <p class="desc">Reserved for system feedback. Click a palette to copy the 500 token.</p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+          <!-- Error -->
+          <div class="palette-group" style="margin-bottom:0">
+            <div class="palette-group-title"><span class="tag tag-error">Error</span></div>
+            <div class="palette-row">
+              <div class="swatch" style="background:#F1BBB6" onclick="copyToken('color/error/100','#F1BBB6')"><span class="swatch-label" style="color:#57150F;background:rgba(0,0,0,.1)">100</span></div>
+              <div class="swatch" style="background:#E4776D" onclick="copyToken('color/error/300','#E4776D')"><span class="swatch-label">300</span></div>
+              <div class="swatch" style="background:#D73325" onclick="copyToken('color/error/500','#D73325')"><span class="swatch-label">500</span></div>
+              <div class="swatch" style="background:#8F2218" onclick="copyToken('color/error/700','#8F2218')"><span class="swatch-label">700</span></div>
+              <div class="swatch" style="background:#57150F" onclick="copyToken('color/error/900','#57150F')"><span class="swatch-label">900</span></div>
+            </div>
+          </div>
+          <!-- Warning -->
+          <div class="palette-group" style="margin-bottom:0">
+            <div class="palette-group-title"><span class="tag tag-warning">Warning</span></div>
+            <div class="palette-row">
+              <div class="swatch" style="background:#FBE8C2" onclick="copyToken('color/warning/100','#FBE8C2')"><span class="swatch-label" style="color:#5A451B;background:rgba(0,0,0,.1)">100</span></div>
+              <div class="swatch" style="background:#F8D286" onclick="copyToken('color/warning/300','#F8D286')"><span class="swatch-label" style="color:#5A451B;background:rgba(0,0,0,.1)">300</span></div>
+              <div class="swatch" style="background:#F5BC4A" onclick="copyToken('color/warning/500','#F5BC4A')"><span class="swatch-label" style="color:#5A451B;background:rgba(0,0,0,.1)">500</span></div>
+              <div class="swatch" style="background:#A37D31" onclick="copyToken('color/warning/700','#A37D31')"><span class="swatch-label">700</span></div>
+              <div class="swatch" style="background:#5A451B" onclick="copyToken('color/warning/900','#5A451B')"><span class="swatch-label">900</span></div>
+            </div>
+          </div>
+          <!-- Information -->
+          <div class="palette-group" style="margin-bottom:0">
+            <div class="palette-group-title"><span class="tag tag-info">Information</span></div>
+            <div class="palette-row">
+              <div class="swatch" style="background:#B0D0F2" onclick="copyToken('color/information/100','#B0D0F2')"><span class="swatch-label" style="color:#072F59;background:rgba(0,0,0,.1)">100</span></div>
+              <div class="swatch" style="background:#61A1E5" onclick="copyToken('color/information/300','#61A1E5')"><span class="swatch-label">300</span></div>
+              <div class="swatch" style="background:#1373D8" onclick="copyToken('color/information/500','#1373D8')"><span class="swatch-label">500</span></div>
+              <div class="swatch" style="background:#0C4C90" onclick="copyToken('color/information/700','#0C4C90')"><span class="swatch-label">700</span></div>
+              <div class="swatch" style="background:#072F59" onclick="copyToken('color/information/900','#072F59')"><span class="swatch-label">900</span></div>
+            </div>
+          </div>
+          <!-- Success -->
+          <div class="palette-group" style="margin-bottom:0">
+            <div class="palette-group-title"><span class="tag tag-success">Success</span></div>
+            <div class="palette-row">
+              <div class="swatch" style="background:#B5DFD1" onclick="copyToken('color/success/100','#B5DFD1')"><span class="swatch-label" style="color:#0b3527;background:rgba(0,0,0,.1)">100</span></div>
+              <div class="swatch" style="background:#6BC0A4" onclick="copyToken('color/success/300','#6BC0A4')"><span class="swatch-label">300</span></div>
+              <div class="swatch" style="background:#21A177" onclick="copyToken('color/success/500','#21A177')"><span class="swatch-label">500</span></div>
+              <div class="swatch" style="background:#166B4F" onclick="copyToken('color/success/700','#166B4F')"><span class="swatch-label">700</span></div>
+              <div class="swatch" style="background:#0B3527" onclick="copyToken('color/success/900','#0B3527')"><span class="swatch-label">900</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semantic tokens -->
+      <div class="subsection" id="tokens-semantiques">
+        <h3>1.2 Semantic tokens</h3>
+        <p class="desc">Always use these tokens in code rather than raw hex values.</p>
+
+        <div class="semantic-grid">
+          <!-- Text -->
+          <div class="semantic-card">
+            <div class="semantic-card-header">Text</div>
+            <table class="token-table">
+              <tbody>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#272323"></div>
+                    <span class="token-name" onclick="copyToken('color/text/neutral/bold/default','#272323')">color/text/neutral/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Headings, primary text</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#3A3534"></div>
+                    <span class="token-name" onclick="copyToken('color/text/neutral/subtle/default','#3A3534')">color/text/neutral/subtle/default</span>
+                  </div>
+                </td><td class="usage-note">Body text</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#756B69"></div>
+                    <span class="token-name" onclick="copyToken('color/text/neutral/subtlest/default','#756B69')">color/text/neutral/subtlest/default</span>
+                  </div>
+                </td><td class="usage-note">Placeholders, secondary</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Backgrounds -->
+          <div class="semantic-card">
+            <div class="semantic-card-header">Backgrounds</div>
+            <table class="token-table">
+              <tbody>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#FFFFFF; border:1px solid #E8E6E6"></div>
+                    <span class="token-name" onclick="copyToken('color/background/neutral/subtlest/default','#FFFFFF')">…neutral/subtlest/default</span>
+                  </div>
+                </td><td class="usage-note">Page background</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#E8E6E6"></div>
+                    <span class="token-name" onclick="copyToken('color/background/neutral/subtle/default','#E8E6E6')">…neutral/subtle/default</span>
+                  </div>
+                </td><td class="usage-note">Alternative backgrounds</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#FA6048"></div>
+                    <span class="token-name" onclick="copyToken('color/background/brand/bold/default','#FA6048')">…brand/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Primary buttons, CTA</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#D0503C"></div>
+                    <span class="token-name" onclick="copyToken('color/background/brand/bold/hovered','#D0503C')">…brand/bold/hovered</span>
+                  </div>
+                </td><td class="usage-note">Primary button hover</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#FCAFA3"></div>
+                    <span class="token-name" onclick="copyToken('color/background/brand/subtle/default','#FCAFA3')">…brand/subtle/default</span>
+                  </div>
+                </td><td class="usage-note">Light brand backgrounds</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#5FECAC"></div>
+                    <span class="token-name" onclick="copyToken('color/background/accent-mint/bold/default','#5FECAC')">…accent-mint/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Mint accent badges</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#21A177"></div>
+                    <span class="token-name" onclick="copyToken('color/background/success/bold/default','#21A177')">…success/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Success state</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Borders -->
+          <div class="semantic-card">
+            <div class="semantic-card-header">Borders</div>
+            <table class="token-table">
+              <tbody>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#E8E6E6"></div>
+                    <span class="token-name" onclick="copyToken('color/border/neutral/subtlest/default','#E8E6E6')">…neutral/subtlest/default</span>
+                  </div>
+                </td><td class="usage-note">Light borders, dividers</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#272323"></div>
+                    <span class="token-name" onclick="copyToken('color/border/neutral/bold/default','#272323')">…neutral/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Bold borders</td></tr>
+                <tr><td>
+                  <div class="color-cell">
+                    <div class="color-dot" style="background:#FA6048"></div>
+                    <span class="token-name" onclick="copyToken('color/border/brand/bold/default','#FA6048')">…brand/bold/default</span>
+                  </div>
+                </td><td class="usage-note">Focus ring, selection</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 2. DIMENSIONS                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="dimensions">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2>Dimensions</h2>
+      </div>
+      <p class="desc">Scale based on a 4 px grid. These tokens serve primarily as a foundation for typography (font sizes, line heights).</p>
+
+      <div class="subsection">
+        <h3>Complete scale</h3>
+        <div class="dim-scale">
+          <!-- fine steps -->
+          <div style="font-size:12px;font-weight:600;color:var(--grey-400);padding:12px 0 4px;text-transform:uppercase;letter-spacing:.05em">Fine steps</div>
+          <div class="dim-row"><span class="dim-token">dimension-100</span><span class="dim-px">4 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:4px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-200</span><span class="dim-px">8 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:8px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-250</span><span class="dim-px">10 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:10px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-300</span><span class="dim-px">12 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:12px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-400</span><span class="dim-px">16 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:16px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-500</span><span class="dim-px">20 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:20px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-600</span><span class="dim-px">24 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:24px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-700</span><span class="dim-px">28 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:28px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-800</span><span class="dim-px">32 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:32px"></div></div></div>
+          <!-- large steps -->
+          <div style="font-size:12px;font-weight:600;color:var(--grey-400);padding:20px 0 4px;text-transform:uppercase;letter-spacing:.05em">Large steps</div>
+          <div class="dim-row"><span class="dim-token">dimension-1000</span><span class="dim-px">40 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:40px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-1100</span><span class="dim-px">44 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:44px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-1200</span><span class="dim-px">48 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:48px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-1400</span><span class="dim-px">56 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:56px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-1600</span><span class="dim-px">64 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:64px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-1800</span><span class="dim-px">72 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:72px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-2000</span><span class="dim-px">80 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:80px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-2200</span><span class="dim-px">88 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:88px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-2600</span><span class="dim-px">104 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:104px"></div></div></div>
+          <div class="dim-row"><span class="dim-token">dimension-3000</span><span class="dim-px">120 px</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:120px"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 3. SPACING, RADIUS, BORDERS                 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="espacement">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2>Spacing, radius & borders</h2>
+      </div>
+
+      <!-- Spacing -->
+      <div class="subsection" id="spacing">
+        <h3>3.1 Spacing</h3>
+        <p class="desc">Spacing scale (padding, margin, gap) based on a 4 px grid.</p>
+        <div class="spacing-grid">
+          <div class="spacing-card"><div class="spacing-preview" style="height:0;width:100%"></div><div class="spacing-card-label">spacing-none</div><div class="spacing-card-value">0</div><div class="spacing-card-usage">Reset</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:4px;width:100%"></div><div class="spacing-card-label">spacing-xs</div><div class="spacing-card-value">4 px</div><div class="spacing-card-usage">Icons, badges</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:8px;width:100%"></div><div class="spacing-card-label">spacing-sm</div><div class="spacing-card-value">8 px</div><div class="spacing-card-usage">Tight spacing</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:12px;width:100%"></div><div class="spacing-card-label">spacing-md</div><div class="spacing-card-value">12 px</div><div class="spacing-card-usage">Internal standard</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:16px;width:100%"></div><div class="spacing-card-label">spacing-lg</div><div class="spacing-card-value">16 px</div><div class="spacing-card-usage">Button padding</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:20px;width:100%"></div><div class="spacing-card-label">spacing-xl</div><div class="spacing-card-value">20 px</div><div class="spacing-card-usage">—</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:24px;width:100%"></div><div class="spacing-card-label">spacing-2xl</div><div class="spacing-card-value">24 px</div><div class="spacing-card-usage">Card padding</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:32px;width:100%"></div><div class="spacing-card-label">spacing-3xl</div><div class="spacing-card-value">32 px</div><div class="spacing-card-usage">Component gap</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:40px;width:100%"></div><div class="spacing-card-label">spacing-4xl</div><div class="spacing-card-value">40 px</div><div class="spacing-card-usage">Section</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:48px;width:100%"></div><div class="spacing-card-label">spacing-5xl</div><div class="spacing-card-value">48 px</div><div class="spacing-card-usage">—</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:56px;width:100%"></div><div class="spacing-card-label">spacing-6xl</div><div class="spacing-card-value">56 px</div><div class="spacing-card-usage">—</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:60px;width:100%"></div><div class="spacing-card-label">spacing-7xl</div><div class="spacing-card-value">80 px</div><div class="spacing-card-usage">Large sections</div></div>
+          <div class="spacing-card"><div class="spacing-preview" style="height:60px;width:100%;position:relative"><div style="position:absolute;bottom:-4px;right:4px;font-size:9px;color:var(--brand-500)">120 px</div></div><div class="spacing-card-label">spacing-8xl</div><div class="spacing-card-value">120 px</div><div class="spacing-card-usage">Page margins, hero</div></div>
+        </div>
+      </div>
+
+      <!-- Radius -->
+      <div class="subsection" id="radius">
+        <h3>3.2 Border radius</h3>
+        <div class="radius-grid">
+          <div class="radius-card"><div class="radius-preview" style="border-radius:0px"></div><span class="radius-card-label">radius-none</span><span class="radius-card-value">0 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:4px"></div><span class="radius-card-label">radius-xs</span><span class="radius-card-value">4 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:8px"></div><span class="radius-card-label">radius-sm</span><span class="radius-card-value">8 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:12px"></div><span class="radius-card-label">radius-md</span><span class="radius-card-value">12 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:16px"></div><span class="radius-card-label">radius-lg</span><span class="radius-card-value">16 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:24px"></div><span class="radius-card-label">radius-xl</span><span class="radius-card-value">24 px</span></div>
+          <div class="radius-card"><div class="radius-preview" style="border-radius:999px"></div><span class="radius-card-label">radius-full</span><span class="radius-card-value">999 px</span></div>
+        </div>
+      </div>
+
+      <!-- Borders -->
+      <div class="subsection" id="borders">
+        <h3>3.3 Border width</h3>
+        <div class="border-row">
+          <div class="border-preview-wrap"><div class="border-preview" style="border-width:0px"></div></div>
+          <div class="border-info"><div class="border-token">border-none</div><div class="border-desc">0 px — No border</div></div>
+        </div>
+        <div class="border-row">
+          <div class="border-preview-wrap"><div class="border-preview" style="border-width:1px"></div></div>
+          <div class="border-info"><div class="border-token">border-thin</div><div class="border-desc">1 px — Dividers, inputs</div></div>
+        </div>
+        <div class="border-row">
+          <div class="border-preview-wrap"><div class="border-preview" style="border-width:2px"></div></div>
+          <div class="border-info"><div class="border-token">border-default</div><div class="border-desc">2 px — Components, focus ring</div></div>
+        </div>
+        <div class="border-row">
+          <div class="border-preview-wrap"><div class="border-preview" style="border-width:4px"></div></div>
+          <div class="border-info"><div class="border-token">border-thick</div><div class="border-desc">4 px — Accents, active selection</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 4. LAYOUT                                   -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="layout">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2>Layout</h2>
+      </div>
+
+      <div class="subsection" id="breakpoints">
+        <h3>4.1 Breakpoints</h3>
+        <div class="breakpoint-list">
+          <div class="bp-item">
+            <span class="bp-badge">breakpoint-xs</span>
+            <span class="bp-range">320 → 479 px</span>
+            <span class="bp-label">Small mobiles</span>
+            <div class="bp-bar-wrap"><div class="bp-bar" style="width:12%"></div></div>
+          </div>
+          <div class="bp-item">
+            <span class="bp-badge">breakpoint-sm</span>
+            <span class="bp-range">480 → 768 px</span>
+            <span class="bp-label">Large mobiles & portrait tablet</span>
+            <div class="bp-bar-wrap"><div class="bp-bar" style="width:23%"></div></div>
+          </div>
+          <div class="bp-item">
+            <span class="bp-badge">breakpoint-md</span>
+            <span class="bp-range">769 → 1279 px</span>
+            <span class="bp-label">Small desktops & landscape tablet</span>
+            <div class="bp-bar-wrap"><div class="bp-bar" style="width:58%"></div></div>
+          </div>
+          <div class="bp-item">
+            <span class="bp-badge">breakpoint-lg</span>
+            <span class="bp-range">1280 px +</span>
+            <span class="bp-label">Large desktops</span>
+            <div class="bp-bar-wrap"><div class="bp-bar" style="width:100%"></div></div>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top:24px">
+<span class="comment">/* Mobile first */</span>
+<span class="property">@media</span> (min-width: 480px)  { <span class="comment">/* breakpoint-sm */</span> }
+<span class="property">@media</span> (min-width: 769px)  { <span class="comment">/* breakpoint-md */</span> }
+<span class="property">@media</span> (min-width: 1280px) { <span class="comment">/* breakpoint-lg */</span> }
+        </div>
+      </div>
+
+      <div class="subsection" id="grilles">
+        <h3>4.2 Grids</h3>
+
+        <div class="grid-demo">
+          <div class="grid-demo-title">Mobile & portrait tablet — 4 columns, 16 px gutter</div>
+          <div class="grid-vis">
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:16px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:16px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:16px"></div>
+            <div class="grid-col"></div>
+          </div>
+        </div>
+
+        <div class="grid-demo" style="margin-top:16px">
+          <div class="grid-demo-title">Desktop & landscape tablet — 12 columns, 24 px gutter</div>
+          <div class="grid-vis">
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+            <div class="grid-gutter" style="width:12px"></div>
+            <div class="grid-col"></div>
+          </div>
+        </div>
+        <p class="desc" style="margin-top:12px">Rule: design in 4 columns for mobile, then switch to 12 columns from <code style="font-family:var(--font-mono);font-size:12px;background:var(--grey-50);padding:1px 5px;border-radius:4px">breakpoint-md</code>.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 5. TYPOGRAPHY                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="typographie">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2>Typography</h2>
+      </div>
+      <p class="desc"><strong>Typeface:</strong> Neulis Neue (rendered here with DM Sans, same weight range). Available weights: Light 300, Regular 400, Medium 500, Semi Bold 600, Bold 700, Extra Bold 800.</p>
+
+      <!-- Headings -->
+      <div class="subsection" id="headings">
+        <h3>5.1 Headings</h3>
+
+        <div class="type-scale">
+          <div class="type-section-title">Display</div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/display/desktop</span>
+              <span class="type-meta-specs">104px · lh 120px · Bold 700</span>
+            </div>
+            <div class="type-preview type-display-desktop">Design System</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/display/mobile</span>
+              <span class="type-meta-specs">80px · lh 88px · Bold 700</span>
+            </div>
+            <div class="type-preview type-display-mobile">Design System</div>
+          </div>
+
+          <div class="type-section-title">Heading 1</div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading1/desktop</span>
+              <span class="type-meta-specs">80px · lh 88px · Bold 700</span>
+            </div>
+            <div class="type-preview type-h1-desktop">Page title</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading1/mobile</span>
+              <span class="type-meta-specs">64px · lh 72px · Bold 700</span>
+            </div>
+            <div class="type-preview type-h1-mobile">Page title</div>
+          </div>
+
+          <div class="type-section-title">Heading 2</div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading2/desktop</span>
+              <span class="type-meta-specs">40px · lh 56px · Bold 700</span>
+            </div>
+            <div class="type-preview type-h2-desktop">Section subtitle</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading2/mobile</span>
+              <span class="type-meta-specs">32px · lh 40px · Bold 700</span>
+            </div>
+            <div class="type-preview type-h2-mobile">Section subtitle</div>
+          </div>
+
+          <div class="type-section-title">Heading 3</div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading3/desktop</span>
+              <span class="type-meta-specs">32px · lh 44px · Extra Bold 800</span>
+            </div>
+            <div class="type-preview type-h3-desktop">Component title</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">
+              <span class="token-name">text/heading3/mobile</span>
+              <span class="type-meta-specs">28px · lh 40px · Extra Bold 800</span>
+            </div>
+            <div class="type-preview type-h3-mobile">Component title</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="subsection" id="body">
+        <h3>5.2 Body text</h3>
+        <p class="desc">3 sizes × 4 weights. <strong>body/regular/medium</strong> is the default text style.</p>
+
+        <div class="type-scale">
+          <div class="type-section-title">Large — 24 px</div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/thin/large</span><span class="type-meta-specs">24px · lh 32px · Light 300</span></div><div class="type-preview type-body-large-thin">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/regular/large</span><span class="type-meta-specs">24px · lh 32px · Regular 400</span></div><div class="type-preview type-body-large-reg">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/semi/large</span><span class="type-meta-specs">24px · lh 32px · Semi Bold 600</span></div><div class="type-preview type-body-large-semi">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/bold/large</span><span class="type-meta-specs">24px · lh 32px · Bold 700</span></div><div class="type-preview type-body-large-bold">The design system ensures visual consistency.</div></div>
+
+          <div class="type-section-title">Medium — 20 px</div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/thin/medium</span><span class="type-meta-specs">20px · lh 28px · Light 300</span></div><div class="type-preview type-body-med-thin">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/regular/medium</span><span class="type-meta-specs">20px · lh 28px · Regular 400</span></div><div class="type-preview type-body-med-reg">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/semi/medium</span><span class="type-meta-specs">20px · lh 28px · Semi Bold 600</span></div><div class="type-preview type-body-med-semi">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/bold/medium</span><span class="type-meta-specs">20px · lh 28px · Bold 700</span></div><div class="type-preview type-body-med-bold">The design system ensures visual consistency.</div></div>
+
+          <div class="type-section-title">Small — 16 px</div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/thin/small</span><span class="type-meta-specs">16px · lh 24px · Light 300</span></div><div class="type-preview type-body-sm-thin">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/regular/small</span><span class="type-meta-specs">16px · lh 24px · Regular 400</span></div><div class="type-preview type-body-sm-reg">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/semi/small</span><span class="type-meta-specs">16px · lh 24px · Semi Bold 600</span></div><div class="type-preview type-body-sm-semi">The design system ensures visual consistency.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">body/bold/small</span><span class="type-meta-specs">16px · lh 24px · Bold 700</span></div><div class="type-preview type-body-sm-bold">The design system ensures visual consistency.</div></div>
+        </div>
+      </div>
+
+      <!-- Labels -->
+      <div class="subsection" id="labels">
+        <h3>5.3 Labels</h3>
+        <p class="desc">For buttons, form fields and field labels. Always prefer <code style="font-family:var(--font-mono);font-size:12px;background:var(--grey-50);padding:1px 5px;border-radius:4px">label</code> styles over <code style="font-family:var(--font-mono);font-size:12px;background:var(--grey-50);padding:1px 5px;border-radius:4px">body</code> for these use cases.</p>
+
+        <div class="type-scale">
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/regular/large</span><span class="type-meta-specs">24px · Medium 500</span></div><div class="type-preview type-label-lg-reg">Field label</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/bold/large</span><span class="type-meta-specs">24px · Bold 700</span></div><div class="type-preview type-label-lg-bold">Primary button</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/regular/medium</span><span class="type-meta-specs">20px · Medium 500</span></div><div class="type-preview type-label-md-reg">Field label</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/bold/medium</span><span class="type-meta-specs">20px · Bold 700</span></div><div class="type-preview type-label-md-bold">Primary button</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/regular/small</span><span class="type-meta-specs">16px · Medium 500</span></div><div class="type-preview type-label-sm-reg">Field label</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">label/bold/small</span><span class="type-meta-specs">16px · Bold 700</span></div><div class="type-preview type-label-sm-bold">Secondary button</div></div>
+        </div>
+      </div>
+
+      <!-- Captions -->
+      <div class="subsection" id="captions">
+        <h3>5.4 Captions</h3>
+        <p class="desc">Helper text, captions, metadata, legal notices.</p>
+
+        <div class="type-scale">
+          <div class="type-row"><div class="type-meta"><span class="token-name">caption/large</span><span class="type-meta-specs">16px · lh 20px · Regular 400</span></div><div class="type-preview type-caption-lg">Helper text below a form field or image caption.</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">caption/medium</span><span class="type-meta-specs">12px · lh 16px · Regular 400</span></div><div class="type-preview type-caption-md">Timestamp · Metadata · Secondary info</div></div>
+          <div class="type-row"><div class="type-meta"><span class="token-name">caption/small</span><span class="type-meta-specs">10px · lh 16px · Regular 400</span></div><div class="type-preview type-caption-sm">Legal notice · Copyright · Compact tertiary info</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- APPENDIX — CSS VARS                         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="css-vars">
+      <div class="section-header">
+        <span class="section-number">A</span>
+        <h2>CSS Variables</h2>
+      </div>
+      <p class="desc">Implementation example of all tokens as custom CSS variables.</p>
+
+      <div class="code-block">
+<span class="comment">/* ─── Design Tokens ─────────────────────── */</span>
+:root {
+
+  <span class="comment">/* Brand */</span>
+  <span class="property">--color-brand-100</span>: <span class="value">#FEE4E0</span>;
+  <span class="property">--color-brand-300</span>: <span class="value">#FCAFA3</span>;
+  <span class="property">--color-brand-500</span>: <span class="value">#FA6048</span>;
+  <span class="property">--color-brand-700</span>: <span class="value">#D0503C</span>;
+  <span class="property">--color-brand-800</span>: <span class="value">#A64030</span>;
+
+  <span class="comment">/* Semantic tokens — Text */</span>
+  <span class="property">--color-text-neutral-bold</span>:     <span class="value">#272323</span>;
+  <span class="property">--color-text-neutral-subtle</span>:   <span class="value">#3A3534</span>;
+  <span class="property">--color-text-neutral-subtlest</span>: <span class="value">#756B69</span>;
+
+  <span class="comment">/* Semantic tokens — Background */</span>
+  <span class="property">--color-bg-neutral-subtlest</span>:   <span class="value">#FFFFFF</span>;
+  <span class="property">--color-bg-neutral-subtle</span>:     <span class="value">#E8E6E6</span>;
+  <span class="property">--color-bg-brand-bold</span>:         <span class="value">#FA6048</span>;
+  <span class="property">--color-bg-brand-bold-hovered</span>: <span class="value">#D0503C</span>;
+  <span class="property">--color-bg-brand-subtle</span>:       <span class="value">#FCAFA3</span>;
+
+  <span class="comment">/* Semantic tokens — Border */</span>
+  <span class="property">--color-border-neutral-subtlest</span>: <span class="value">#E8E6E6</span>;
+  <span class="property">--color-border-neutral-bold</span>:     <span class="value">#272323</span>;
+  <span class="property">--color-border-brand-bold</span>:       <span class="value">#FA6048</span>;
+
+  <span class="comment">/* Spacing */</span>
+  <span class="property">--spacing-xs</span>:  <span class="value">4px</span>;
+  <span class="property">--spacing-sm</span>:  <span class="value">8px</span>;
+  <span class="property">--spacing-md</span>:  <span class="value">12px</span>;
+  <span class="property">--spacing-lg</span>:  <span class="value">16px</span>;
+  <span class="property">--spacing-xl</span>:  <span class="value">20px</span>;
+  <span class="property">--spacing-2xl</span>: <span class="value">24px</span>;
+  <span class="property">--spacing-3xl</span>: <span class="value">32px</span>;
+  <span class="property">--spacing-4xl</span>: <span class="value">40px</span>;
+  <span class="property">--spacing-5xl</span>: <span class="value">48px</span>;
+  <span class="property">--spacing-7xl</span>: <span class="value">80px</span>;
+  <span class="property">--spacing-8xl</span>: <span class="value">120px</span>;
+
+  <span class="comment">/* Border radius */</span>
+  <span class="property">--radius-none</span>: <span class="value">0</span>;
+  <span class="property">--radius-xs</span>:   <span class="value">4px</span>;
+  <span class="property">--radius-sm</span>:   <span class="value">8px</span>;
+  <span class="property">--radius-md</span>:   <span class="value">12px</span>;
+  <span class="property">--radius-lg</span>:   <span class="value">16px</span>;
+  <span class="property">--radius-xl</span>:   <span class="value">24px</span>;
+  <span class="property">--radius-full</span>: <span class="value">999px</span>;
+
+  <span class="comment">/* Border width */</span>
+  <span class="property">--border-thin</span>:    <span class="value">1px</span>;
+  <span class="property">--border-default</span>: <span class="value">2px</span>;
+  <span class="property">--border-thick</span>:   <span class="value">4px</span>;
+
+  <span class="comment">/* Typography */</span>
+  <span class="property">--font-family-base</span>: <span class="value">'Neulis Neue', sans-serif</span>;
+}
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── Toast ────────────────────────────────── -->
+  <div class="toast" id="toast">Token copied!</div>
+
+  <script>
+    // Copy to clipboard
+    function copyToken(token, value) {
+      const text = value || token;
+      navigator.clipboard.writeText(text).then(() => {
+        const t = document.getElementById('toast');
+        t.textContent = `Copied: ${text}`;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+      });
+    }
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('.section, .subsection');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const id = entry.target.id;
+          const link = document.querySelector(`.nav-link[href="#${id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
