@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laura's Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:     #F1EFE7;
+            --fg:     #111110;
+            --muted:  #88887E;
+            --border: rgba(17, 17, 16, 0.13);
+
+            --yellow: #F2C94C;
+            --coral:  #E07B63;
+            --sage:   #95BCA8;
+            --blue:   #8FAECB;
+            --lilac:  #B8A8D0;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { cursor: none; scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 400;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 8rem;
+        }
+
+        /* ── Custom cursor ──────────────────────────────── */
+
+        #cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 11px;
+            height: 11px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition:
+                width  0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        #cursor.expanded { width: 52px; height: 52px; }
+
+        /* ── Scattered chips ────────────────────────────── */
+
+        .chip {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        /* ── Page reveal ────────────────────────────────── */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Layout ─────────────────────────────────────── */
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Hero ───────────────────────────────────────── */
+
+        .hero { padding: 4rem 0 3rem; }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 10.5vw, 9rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 0.88;
+            letter-spacing: -0.025em;
+            margin-bottom: 2.5rem;
+            animation-delay: 0.2s;
+        }
+
+        .hero-title strong {
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.8;
+            white-space: nowrap;
+            animation-delay: 0.4s;
+        }
+
+        /* ── Projects ───────────────────────────────────── */
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 3rem 0 0;
+            animation-delay: 0.5s;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .on-view {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .project-list {
+            border-top: 1px solid var(--border);
+            margin-bottom: 8rem;
+            animation-delay: 0.6s;
+        }
+
+        .project-row {
+            position: relative;
+            display: grid;
+            grid-template-columns: 3.5rem 1fr auto 2.5rem;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.6rem 0;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+            transition: color 0.4s ease;
+        }
+
+        .project-row::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--fg);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+            z-index: 0;
+        }
+
+        .project-row:hover::before { transform: scaleX(1); }
+        .project-row:hover { color: var(--bg); }
+        .project-row > * { position: relative; z-index: 1; }
+
+        .row-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--muted);
+            transition: color 0.4s ease;
+            line-height: 1;
+        }
+
+        .project-row:hover .row-num { color: rgba(241, 239, 231, 0.4); }
+
+        .row-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            line-height: 1;
+        }
+
+        .row-tags { display: flex; gap: 0.45rem; }
+
+        .row-tag {
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 0.22rem 0.65rem;
+            border: 1px solid currentColor;
+            border-radius: 100px;
+            transition: color 0.4s ease, background 0.4s ease;
+        }
+
+        .row-tag.t-yellow { color: #7A5E08; background: var(--yellow); border-color: #7A5E08; }
+        .row-tag.t-coral  { color: #7A2010; background: var(--coral);  border-color: #7A2010; }
+        .row-tag.t-sage   { color: #1E4D34; background: var(--sage);   border-color: #1E4D34; }
+        .row-tag.t-blue   { color: #14355A; background: var(--blue);   border-color: #14355A; }
+        .row-tag.t-lilac  { color: #3A2060; background: var(--lilac);  border-color: #3A2060; }
+
+        .project-row:hover .row-tag {
+            color: rgba(241, 239, 231, 0.65);
+            background: transparent;
+            border-color: currentColor;
+        }
+
+        .row-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .project-row:hover .row-arrow { transform: translate(3px, -3px); }
+
+        /* ── Responsive ─────────────────────────────────── */
+
+        @media (max-width: 600px) {
+            .wrap { padding: 0 1.25rem; }
+            .hero { padding: 3.5rem 0 3rem; }
+            .chip { display: none; }
+            .project-row { grid-template-columns: 2.5rem 1fr 2rem; }
+            .row-tags { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+
+    <div class="wrap">
+        <section class="hero">
+            <h1 class="hero-title reveal">
+                Laura's<br><strong>Playground</strong>
+            </h1>
+            <p class="hero-desc reveal">Here are the things I'm building and experimenting.</p>
+        </section>
+
+        <div class="section-head reveal">
+            <span class="section-label">Projects</span>
+            <span class="on-view">1 work on view</span>
+        </div>
+
+        <div class="project-list reveal">
+
+            <a href="designsystem-documentation.html" class="project-row">
+                <span class="row-num">01</span>
+                <span class="row-title">Design System Documentation</span>
+                <div class="row-tags">
+                    <span class="row-tag t-yellow">Design</span>
+                </div>
+                <div class="row-arrow">
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                        <path d="M3 12L12 3M12 3H5M12 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Add new project rows here -->
+
+        </div>
+    </div>
+
+    <script>
+        // ── Scattered chips — hard exclusion zone ─────────
+        //
+        // Each chip has a fixed home position.
+        // A hard exclusion circle around the cursor always stays empty:
+        // if a chip enters the circle, it's strongly pushed to the boundary.
+        // Spring + friction returns chips to home when cursor moves away.
+
+        const CHIP_DEFS = [
+            // ── Left margin ───────────────────────────────
+            { vx:  4, vy: 12, w: 14, h: 14,  br: '50%',   color: '#F2C94C', rot: -14 },
+            { vx:  2, vy: 22, w: 24, h:  8,  br: '100px', color: '#E07B63', rot:  10 },
+            { vx:  6, vy: 33, w:  9, h:  9,  br: '50%',   color: '#95BCA8', rot:  -6 },
+            { vx:  2, vy: 42, w: 20, h:  8,  br: '100px', color: '#B8A8D0', rot:  14 },
+            { vx:  5, vy: 52, w: 10, h: 10,  br: '50%',   color: '#8FAECB', rot:  -8 },
+            { vx:  3, vy: 62, w: 20, h:  8,  br: '100px', color: '#F2C94C', rot: -16 },
+            { vx:  6, vy: 72, w:  9, h:  9,  br: '50%',   color: '#E07B63', rot:   5 },
+            { vx:  2, vy: 80, w: 17, h:  6,  br: '100px', color: '#95BCA8', rot: -10 },
+            { vx:  5, vy: 90, w: 11, h: 11,  br: '50%',   color: '#B8A8D0', rot:  12 },
+            // ── Right margin ──────────────────────────────
+            { vx: 94, vy: 36, w: 11, h: 11,  br: '50%',   color: '#F2C94C', rot:   9 },
+            { vx: 92, vy: 46, w: 22, h:  8,  br: '100px', color: '#95BCA8', rot:  -6 },
+            { vx: 95, vy: 56, w: 10, h: 10,  br: '50%',   color: '#E07B63', rot:  13 },
+            { vx: 92, vy: 65, w: 25, h:  9,  br: '100px', color: '#B8A8D0', rot: -13 },
+            { vx: 95, vy: 74, w: 10, h: 10,  br: '50%',   color: '#8FAECB', rot:   4 },
+            { vx: 93, vy: 83, w: 18, h:  7,  br: '100px', color: '#F2C94C', rot:  -8 },
+            { vx: 96, vy: 91, w: 12, h: 12,  br: '50%',   color: '#E07B63', rot:  11 },
+            // ── Top area (including right of title) ───────
+            { vx: 48, vy:  4, w:  8, h:  8,  br: '50%',   color: '#E07B63', rot:  -5 },
+            { vx: 58, vy:  8, w: 19, h:  7,  br: '100px', color: '#F2C94C', rot:   6 },
+            { vx: 68, vy:  4, w:  9, h:  9,  br: '50%',   color: '#95BCA8', rot: -12 },
+            { vx: 76, vy: 10, w: 21, h:  7,  br: '100px', color: '#B8A8D0', rot:   9 },
+            { vx: 84, vy:  5, w:  9, h:  9,  br: '50%',   color: '#8FAECB', rot:  -7 },
+            { vx: 62, vy: 17, w:  8, h:  8,  br: '50%',   color: '#E07B63', rot: -15 },
+            { vx: 72, vy: 22, w: 17, h:  6,  br: '100px', color: '#F2C94C', rot:  10 },
+            { vx: 88, vy: 15, w: 11, h: 11,  br: '50%',   color: '#95BCA8', rot:   4 },
+            { vx: 94, vy:  8, w: 13, h: 13,  br: '50%',   color: '#E07B63', rot:  18 },
+            { vx: 96, vy: 17, w: 22, h:  8,  br: '100px', color: '#B8A8D0', rot:  -5 },
+            // ── Bottom ────────────────────────────────────
+            { vx: 18, vy: 93, w: 15, h: 15,  br: '50%',   color: '#F2C94C', rot:   7 },
+            { vx: 35, vy: 96, w:  9, h:  9,  br: '50%',   color: '#E07B63', rot:  10 },
+            { vx: 58, vy: 95, w: 19, h:  7,  br: '100px', color: '#8FAECB', rot:  -7 },
+            { vx: 76, vy: 94, w: 21, h:  8,  br: '100px', color: '#B8A8D0', rot: -11 },
+        ];
+
+        // Physics constants
+        const EXCL_R   = 88;    // hard exclusion radius (px) — always empty around cursor
+        const SPRING   = 0.032; // return stiffness
+        const FRICTION = 0.78;  // velocity damping
+
+        let mx = -9999, my = -9999; // start off-screen so chips don't jump on load
+
+        const chips = CHIP_DEFS.map(def => {
+            const el = document.createElement('div');
+            el.className = 'chip';
+            el.style.cssText = `width:${def.w}px;height:${def.h}px;border-radius:${def.br};background:${def.color};`;
+            document.body.appendChild(el);
+            return {
+                el,
+                hx: 0, hy: 0,   // home (px)
+                px: 0, py: 0,   // current position
+                vx: 0, vy: 0,   // velocity
+                rot: def.rot,
+                pvx: def.vx / 100, pvy: def.vy / 100,
+                w: def.w, h: def.h,
+            };
+        });
+
+        function setHomes() {
+            const W = window.innerWidth, H = window.innerHeight;
+            chips.forEach(c => {
+                c.hx = c.pvx * W - c.w / 2;
+                c.hy = c.pvy * H - c.h / 2;
+                if (c.px === 0 && c.py === 0) { c.px = c.hx; c.py = c.hy; }
+                c.el.style.left = c.hx + 'px';
+                c.el.style.top  = c.hy + 'px';
+            });
+        }
+
+        setHomes();
+        window.addEventListener('resize', setHomes);
+
+        (function physicsLoop() {
+            chips.forEach(c => {
+                // Spring back to home
+                c.vx += (c.hx - c.px) * SPRING;
+                c.vy += (c.hy - c.py) * SPRING;
+
+                // Hard exclusion: push chip center to the circle boundary
+                const cx = c.px + c.w / 2;
+                const cy = c.py + c.h / 2;
+                const dx = cx - mx;
+                const dy = cy - my;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < EXCL_R && dist > 0.5) {
+                    // Target: chip center sits exactly on exclusion circle
+                    const tx = mx + (dx / dist) * EXCL_R - c.w / 2;
+                    const ty = my + (dy / dist) * EXCL_R - c.h / 2;
+                    c.vx += (tx - c.px) * 0.4;
+                    c.vy += (ty - c.py) * 0.4;
+                }
+
+                c.vx *= FRICTION;
+                c.vy *= FRICTION;
+                c.px += c.vx;
+                c.py += c.vy;
+
+                const ox = c.px - c.hx;
+                const oy = c.py - c.hy;
+                c.el.style.transform = `translate(${ox}px,${oy}px) rotate(${c.rot}deg)`;
+            });
+            requestAnimationFrame(physicsLoop);
+        })();
+
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+        // ── Custom cursor ──────────────────────────────────
+        const cursor = document.getElementById('cursor');
+        let cmx = 0, cmy = 0, ccx = 0, ccy = 0;
+
+        document.addEventListener('mousemove', e => { cmx = e.clientX; cmy = e.clientY; });
+        document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+        document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+
+        (function cursorLoop() {
+            ccx += (cmx - ccx) * 0.1;
+            ccy += (cmy - ccy) * 0.1;
+            cursor.style.left = ccx + 'px';
+            cursor.style.top  = ccy + 'px';
+            requestAnimationFrame(cursorLoop);
+        })();
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+        });
+
+        // ── Project count ──────────────────────────────────
+        const rowCount = document.querySelectorAll('.project-row').length;
+        const label = document.querySelector('.on-view');
+        if (label) label.textContent = rowCount === 1 ? '1 work on view' : `${rowCount} works on view`;
+    </script>
+</body>
+</html>
