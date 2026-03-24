@@ -34,6 +34,7 @@
             overflow-x: hidden;
             min-height: 100vh;
             padding-bottom: 8rem;
+            position: relative;
         }
 
         /* ── Custom cursor ──────────────────────────────── */
@@ -47,6 +48,7 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
+            will-change: transform;
             transform: translate(-50%, -50%);
             transition:
                 width  0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -56,15 +58,6 @@
         }
 
         #cursor.expanded { width: 52px; height: 52px; }
-
-        /* ── Scattered chips ────────────────────────────── */
-
-        .chip {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1;
-            will-change: transform;
-        }
 
         /* ── Page reveal ────────────────────────────────── */
 
@@ -101,6 +94,8 @@
             letter-spacing: -0.025em;
             margin-bottom: 2.5rem;
             animation-delay: 0.2s;
+            background: var(--bg);
+            width: fit-content;
         }
 
         .hero-title strong {
@@ -115,6 +110,8 @@
             line-height: 1.8;
             white-space: nowrap;
             animation-delay: 0.4s;
+            background: var(--bg);
+            width: fit-content;
         }
 
         /* ── Projects ───────────────────────────────────── */
@@ -146,6 +143,7 @@
             border-top: 1px solid var(--border);
             margin-bottom: 8rem;
             animation-delay: 0.6s;
+            background: var(--bg);
         }
 
         .project-row {
@@ -184,6 +182,7 @@
             color: var(--muted);
             transition: color 0.4s ease;
             line-height: 1;
+            padding-left: 16px;
         }
 
         .project-row:hover .row-num { color: rgba(241, 239, 231, 0.4); }
@@ -280,137 +279,123 @@
     </div>
 
     <script>
-        // ── Scattered chips — hard exclusion zone ─────────
+        // ── Confetti physics ───────────────────────────────
         //
-        // Each chip has a fixed home position.
-        // A hard exclusion circle around the cursor always stays empty:
-        // if a chip enters the circle, it's strongly pushed to the boundary.
-        // Spring + friction returns chips to home when cursor moves away.
+        // Random SVG polygons scattered across the page.
+        // Cursor push repels nearby shapes; they drift back to origin.
 
-        const CHIP_DEFS = [
-            // ── Left margin ───────────────────────────────
-            { vx:  4, vy: 12, w: 14, h: 14,  br: '50%',   color: '#F2C94C', rot: -14 },
-            { vx:  2, vy: 22, w: 24, h:  8,  br: '100px', color: '#E07B63', rot:  10 },
-            { vx:  6, vy: 33, w:  9, h:  9,  br: '50%',   color: '#95BCA8', rot:  -6 },
-            { vx:  2, vy: 42, w: 20, h:  8,  br: '100px', color: '#B8A8D0', rot:  14 },
-            { vx:  5, vy: 52, w: 10, h: 10,  br: '50%',   color: '#8FAECB', rot:  -8 },
-            { vx:  3, vy: 62, w: 20, h:  8,  br: '100px', color: '#F2C94C', rot: -16 },
-            { vx:  6, vy: 72, w:  9, h:  9,  br: '50%',   color: '#E07B63', rot:   5 },
-            { vx:  2, vy: 80, w: 17, h:  6,  br: '100px', color: '#95BCA8', rot: -10 },
-            { vx:  5, vy: 90, w: 11, h: 11,  br: '50%',   color: '#B8A8D0', rot:  12 },
-            // ── Right margin ──────────────────────────────
-            { vx: 94, vy: 36, w: 11, h: 11,  br: '50%',   color: '#F2C94C', rot:   9 },
-            { vx: 92, vy: 46, w: 22, h:  8,  br: '100px', color: '#95BCA8', rot:  -6 },
-            { vx: 95, vy: 56, w: 10, h: 10,  br: '50%',   color: '#E07B63', rot:  13 },
-            { vx: 92, vy: 65, w: 25, h:  9,  br: '100px', color: '#B8A8D0', rot: -13 },
-            { vx: 95, vy: 74, w: 10, h: 10,  br: '50%',   color: '#8FAECB', rot:   4 },
-            { vx: 93, vy: 83, w: 18, h:  7,  br: '100px', color: '#F2C94C', rot:  -8 },
-            { vx: 96, vy: 91, w: 12, h: 12,  br: '50%',   color: '#E07B63', rot:  11 },
-            // ── Top area (including right of title) ───────
-            { vx: 48, vy:  4, w:  8, h:  8,  br: '50%',   color: '#E07B63', rot:  -5 },
-            { vx: 58, vy:  8, w: 19, h:  7,  br: '100px', color: '#F2C94C', rot:   6 },
-            { vx: 68, vy:  4, w:  9, h:  9,  br: '50%',   color: '#95BCA8', rot: -12 },
-            { vx: 76, vy: 10, w: 21, h:  7,  br: '100px', color: '#B8A8D0', rot:   9 },
-            { vx: 84, vy:  5, w:  9, h:  9,  br: '50%',   color: '#8FAECB', rot:  -7 },
-            { vx: 62, vy: 17, w:  8, h:  8,  br: '50%',   color: '#E07B63', rot: -15 },
-            { vx: 72, vy: 22, w: 17, h:  6,  br: '100px', color: '#F2C94C', rot:  10 },
-            { vx: 88, vy: 15, w: 11, h: 11,  br: '50%',   color: '#95BCA8', rot:   4 },
-            { vx: 94, vy:  8, w: 13, h: 13,  br: '50%',   color: '#E07B63', rot:  18 },
-            { vx: 96, vy: 17, w: 22, h:  8,  br: '100px', color: '#B8A8D0', rot:  -5 },
-            // ── Bottom ────────────────────────────────────
-            { vx: 18, vy: 93, w: 15, h: 15,  br: '50%',   color: '#F2C94C', rot:   7 },
-            { vx: 35, vy: 96, w:  9, h:  9,  br: '50%',   color: '#E07B63', rot:  10 },
-            { vx: 58, vy: 95, w: 19, h:  7,  br: '100px', color: '#8FAECB', rot:  -7 },
-            { vx: 76, vy: 94, w: 21, h:  8,  br: '100px', color: '#B8A8D0', rot: -11 },
-        ];
+        const PALETTE = ['#F2C94C', '#E07B63', '#95BCA8', '#8FAECB', '#B8A8D0'];
+        const PUSH_RADIUS   = 70;
+        const PUSH_STRENGTH = 6000;
+        const RETURN_SPEED  = 0.009;
+        const DAMPING       = 0.82;
 
-        // Physics constants
-        const EXCL_R   = 88;    // hard exclusion radius (px) — always empty around cursor
-        const SPRING   = 0.032; // return stiffness
-        const FRICTION = 0.78;  // velocity damping
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:1;';
+        document.body.appendChild(svg);
 
-        let mx = -9999, my = -9999; // start off-screen so chips don't jump on load
-
-        const chips = CHIP_DEFS.map(def => {
-            const el = document.createElement('div');
-            el.className = 'chip';
-            el.style.cssText = `width:${def.w}px;height:${def.h}px;border-radius:${def.br};background:${def.color};`;
-            document.body.appendChild(el);
-            return {
-                el,
-                hx: 0, hy: 0,   // home (px)
-                px: 0, py: 0,   // current position
-                vx: 0, vy: 0,   // velocity
-                rot: def.rot,
-                pvx: def.vx / 100, pvy: def.vy / 100,
-                w: def.w, h: def.h,
-            };
-        });
-
-        function setHomes() {
-            const W = window.innerWidth, H = window.innerHeight;
-            chips.forEach(c => {
-                c.hx = c.pvx * W - c.w / 2;
-                c.hy = c.pvy * H - c.h / 2;
-                if (c.px === 0 && c.py === 0) { c.px = c.hx; c.py = c.hy; }
-                c.el.style.left = c.hx + 'px';
-                c.el.style.top  = c.hy + 'px';
-            });
+        function updateSvgHeight() {
+            svg.style.height = document.documentElement.scrollHeight + 'px';
         }
 
-        setHomes();
-        window.addEventListener('resize', setHomes);
+        function makePolygon() {
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            const size = 5 + Math.random() * 6;
+            const r = Math.random();
+            let pts = [];
 
-        (function physicsLoop() {
-            chips.forEach(c => {
-                // Spring back to home
-                c.vx += (c.hx - c.px) * SPRING;
-                c.vy += (c.hy - c.py) * SPRING;
+            if (r < 0.35) {
+                // Irregular quadrilateral — flattened on one axis
+                for (let i = 0; i < 4; i++) {
+                    const angle = (i / 4) * Math.PI * 2 + (Math.random() - 0.5) * 0.8;
+                    const rad   = size * (0.6 + Math.random() * 0.4) * (i % 2 === 0 ? 1 : 0.5);
+                    pts.push([Math.cos(angle) * rad, Math.sin(angle) * rad]);
+                }
+            } else if (r < 0.65) {
+                // Pentagon / hexagon blob
+                const n = Math.random() < 0.5 ? 5 : 6;
+                for (let i = 0; i < n; i++) {
+                    const angle = (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+                    const rad   = size * (0.7 + Math.random() * 0.3);
+                    pts.push([Math.cos(angle) * rad, Math.sin(angle) * rad]);
+                }
+            } else {
+                // Bandelette — thin strip with slight skew
+                const w  = size * (0.7 + Math.random() * 0.7);
+                const h  = size * 0.25;
+                const sk = (Math.random() - 0.5) * h;
+                pts = [[-w, -h + sk], [w, -h - sk], [w, h + sk], [-w, h - sk]];
+            }
 
-                // Hard exclusion: push chip center to the circle boundary
-                const cx = c.px + c.w / 2;
-                const cy = c.py + c.h / 2;
-                const dx = cx - mx;
-                const dy = cy - my;
+            poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+            poly.setAttribute('fill', PALETTE[Math.floor(Math.random() * PALETTE.length)]);
+            poly.setAttribute('opacity', (0.55 + Math.random() * 0.45).toFixed(2));
+            return poly;
+        }
+
+        let confetti = [];
+        let mx = -9999, my = -9999;
+
+        function initConfetti() {
+            updateSvgHeight();
+            const W = window.innerWidth;
+            const H = document.documentElement.scrollHeight;
+            const count = Math.floor(W * H / 1500);
+            confetti.forEach(c => svg.removeChild(c.el));
+            confetti = [];
+            for (let i = 0; i < count; i++) {
+                const el  = makePolygon();
+                svg.appendChild(el);
+                const x   = Math.random() * W;
+                const y   = Math.random() * H;
+                const rot = Math.random() * 360;
+                confetti.push({ el, ox: x, oy: y, x, y, vx: 0, vy: 0, rot, vrot: 0 });
+                el.setAttribute('transform', `translate(${x},${y}) rotate(${rot})`);
+            }
+        }
+
+        initConfetti();
+        window.addEventListener('resize', initConfetti);
+
+        (function confettiLoop() {
+            const docMy = my + window.scrollY;
+            confetti.forEach(c => {
+                const dx   = c.x - mx;
+                const dy   = c.y - docMy;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                if (dist < EXCL_R && dist > 0.5) {
-                    // Target: chip center sits exactly on exclusion circle
-                    const tx = mx + (dx / dist) * EXCL_R - c.w / 2;
-                    const ty = my + (dy / dist) * EXCL_R - c.h / 2;
-                    c.vx += (tx - c.px) * 0.4;
-                    c.vy += (ty - c.py) * 0.4;
+                if (dist < PUSH_RADIUS && dist > 0.5) {
+                    const force = PUSH_STRENGTH / (dist * dist);
+                    c.vx += (dx / dist) * force;
+                    c.vy += (dy / dist) * force;
                 }
 
-                c.vx *= FRICTION;
-                c.vy *= FRICTION;
-                c.px += c.vx;
-                c.py += c.vy;
+                c.vx += (c.ox - c.x) * RETURN_SPEED;
+                c.vy += (c.oy - c.y) * RETURN_SPEED;
+                c.vx *= DAMPING;
+                c.vy *= DAMPING;
+                c.x  += c.vx;
+                c.y  += c.vy;
 
-                const ox = c.px - c.hx;
-                const oy = c.py - c.hy;
-                c.el.style.transform = `translate(${ox}px,${oy}px) rotate(${c.rot}deg)`;
+                const speed = Math.sqrt(c.vx * c.vx + c.vy * c.vy);
+                c.vrot = c.vrot * DAMPING + speed * 0.3;
+                c.rot += c.vrot;
+
+                c.el.setAttribute('transform', `translate(${c.x},${c.y}) rotate(${c.rot})`);
             });
-            requestAnimationFrame(physicsLoop);
+            requestAnimationFrame(confettiLoop);
         })();
 
         document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
         // ── Custom cursor ──────────────────────────────────
         const cursor = document.getElementById('cursor');
-        let cmx = 0, cmy = 0, ccx = 0, ccy = 0;
 
-        document.addEventListener('mousemove', e => { cmx = e.clientX; cmy = e.clientY; });
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        });
         document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
         document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
-
-        (function cursorLoop() {
-            ccx += (cmx - ccx) * 0.1;
-            ccy += (cmy - ccy) * 0.1;
-            cursor.style.left = ccx + 'px';
-            cursor.style.top  = ccy + 'px';
-            requestAnimationFrame(cursorLoop);
-        })();
 
         document.querySelectorAll('a, button').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
