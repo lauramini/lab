@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Design System — Documentation</title>
+  <link rel="stylesheet" href="https://use.typekit.net/dji3sih.css">
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
   <style>
     /* ─── Design Tokens ──────────────────────────── */
@@ -61,7 +62,7 @@
       --success-700: #166B4F;
       --success-900: #0B3527;
 
-      --font-sans: 'Neulis Neue', system-ui, sans-serif;
+      --font-sans: 'neulis-neue', system-ui, sans-serif;
       --font-mono: 'SFMono-Regular', 'Menlo', 'Consolas', monospace;
     }
 
@@ -218,6 +219,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      align-self: flex-start;
       margin-top: 16px;
       font-size: 13px;
       font-weight: 500;
@@ -785,6 +787,171 @@
 
     .toast.show { opacity: 1; transform: translateY(0); }
 
+    /* ─── Component Docs ────────────────────────────── */
+    .comp-preview {
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .variant-group { display: flex; flex-direction: column; gap: 10px; }
+
+    .variant-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+    }
+
+    .variant-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+    /* Button */
+    .ds-btn {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+    .ds-btn-lg { font-size: 20px; line-height: 1.4; padding: 16px 26px; }
+    .ds-btn-md { font-size: 17px; line-height: 1.4; padding: 13px 20px; }
+    .ds-btn-sm { font-size: 14px; line-height: 1.4; padding: 10px 18px; }
+    .ds-btn-primary   { background: var(--brand-500); border-color: var(--brand-500); color: #fff; }
+    .ds-btn-secondary { background: #fff; border-color: var(--grey-100); color: var(--grey-900); }
+    .ds-btn-ghost     { background: transparent; border-color: var(--grey-900); color: var(--grey-900); }
+    .ds-btn-hovered-p { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
+    .ds-btn-hovered-s { background: var(--grey-100); border-color: var(--grey-200); color: var(--grey-900); }
+    .ds-btn-hovered-g { background: var(--grey-50); border-color: var(--grey-900); color: var(--grey-900); }
+    .ds-btn-pressed-p { background: var(--brand-800); border-color: var(--brand-800); color: #fff; }
+    .ds-btn-pressed-s { background: var(--grey-200); border-color: var(--grey-300); color: var(--grey-900); }
+    .ds-btn-pressed-g { background: var(--grey-100); border-color: var(--grey-900); color: var(--grey-900); }
+    .ds-btn-disabled  { background: var(--grey-300); border-color: var(--grey-300); color: rgba(255,255,255,.5); cursor: not-allowed; }
+    .ds-btn-focused   { outline: 2px solid var(--grey-900); outline-offset: 3px; }
+
+    /* Tag */
+    .ds-tag {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+    }
+    .ds-tag-lg { font-size: 18px; line-height: 1.6; padding: 6px 14px; }
+    .ds-tag-md { font-size: 16px; line-height: 1.6; padding: 3px 11px; }
+    .ds-tag-sm { font-size: 13px; line-height: 1.6; padding: 0 10px; }
+    .ds-tag-default  { background: var(--brand-300); border-color: var(--brand-300); color: var(--grey-900); }
+    .ds-tag-bold     { background: var(--brand-500); border-color: var(--brand-500); color: #fff; }
+    .ds-tag-inverted { background: var(--grey-50);   border-color: var(--grey-100);  color: var(--grey-900); }
+    .ds-tag-ghost    { background: transparent;       border-color: var(--grey-900);  color: var(--grey-900); }
+    .ds-tag-disabled { background: var(--grey-50);   border-color: var(--grey-100);  color: var(--grey-500); }
+
+    /* Card */
+    .ds-card {
+      background: #fff;
+      border: 2px solid var(--grey-100);
+      border-radius: 24px;
+      overflow: hidden;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+    .ds-card-img {
+      background: linear-gradient(135deg, var(--clay-100), var(--brand-100));
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+    .ds-card-body { padding: 24px 20px 36px; display: flex; flex-direction: column; gap: 14px; }
+    .ds-card-title { font-size: 18px; font-weight: 800; line-height: 1.35; color: var(--grey-900); }
+    .ds-card-desc  { font-size: 14px; font-weight: 400; line-height: 1.55; color: var(--grey-900); }
+
+    /* Input */
+    .ds-field { display: flex; flex-direction: column; gap: 4px; min-width: 180px; }
+    .ds-input-box {
+      border: 1px solid var(--grey-100);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--grey-800);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 46px;
+      box-sizing: border-box;
+    }
+    .ds-input-box.focused  { border-color: var(--grey-900); }
+    .ds-input-box.hovered  { border-color: var(--grey-200); }
+    .ds-input-box.error    { border-color: var(--error-500); }
+    .ds-input-box.disabled { background: var(--grey-50); border-color: var(--grey-200); color: var(--grey-400); }
+    .ds-input-title  { font-size: 14px; color: var(--grey-700); flex: 1; }
+    .ds-input-mini   { font-size: 10px; color: var(--grey-400); display: block; line-height: 1.4; }
+    .ds-input-icon   { font-size: 15px; color: var(--grey-500); }
+    .ds-input-helper { font-size: 11px; color: var(--grey-400); }
+    .ds-input-errtext{ font-size: 11px; color: var(--error-500); }
+
+    /* Topbar */
+    .ds-topbar {
+      background: #fff;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      padding: 20px 32px;
+      border: 1px solid var(--grey-50);
+      border-radius: 12px;
+      gap: 20px;
+      width: 100%;
+    }
+    .ds-topbar-logo { font-size: 16px; font-weight: 700; font-style: italic; flex: 1; text-align: center; }
+    .ds-topbar-nav  { display: flex; gap: 20px; }
+    .ds-topbar-nav a { font-size: 14px; font-weight: 500; color: var(--grey-900); text-decoration: none; }
+    .ds-topbar-back  { font-size: 14px; font-weight: 500; color: var(--grey-900); }
+    .ds-topbar-info  { display: flex; gap: 12px; align-items: center; margin-left: auto; }
+    .ds-topbar-page-title { font-size: 14px; font-weight: 600; color: var(--grey-900); }
+
+    /* Do / Don't */
+    .do-dont-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .do-card, .dont-card { border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .do-card   { background: #F0FDF8; border: 1px solid var(--success-300); }
+    .dont-card { background: #FFF5F5; border: 1px solid var(--error-300); }
+    .do-dont-badge { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; display: inline-block; }
+    .do-badge   { background: var(--success-100); color: var(--success-700); }
+    .dont-badge { background: var(--error-100);   color: var(--error-700); }
+    .do-dont-text { font-size: 13px; color: var(--grey-700); line-height: 1.5; }
+    .do-dont-preview { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
+
+    /* Icon grid */
+    .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+    .icon-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 8px;
+      background: #fff;
+      border: 1px solid var(--grey-50);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color .12s, background .12s;
+    }
+    .icon-card:hover { background: var(--brand-100); border-color: var(--brand-300); }
+    .icon-symbol { font-size: 20px; color: var(--grey-800); height: 24px; display: flex; align-items: center; }
+    .icon-name { font-family: var(--font-mono); font-size: 10px; color: var(--grey-500); text-align: center; word-break: break-all; }
+
     /* ─── Utilities ──────────────────────────────── */
     .tag {
       display: inline-block;
@@ -830,8 +997,6 @@
       <a class="nav-link" href="#couleurs">
         <span class="nav-icon">🎨</span> Colors
       </a>
-      <a class="nav-sub-link" href="#palette-primitive">Primitive palette</a>
-      <a class="nav-sub-link" href="#tokens-semantiques">Semantic tokens</a>
 
       <a class="nav-link" href="#dimensions">
         <span class="nav-icon">📐</span> Dimensions
@@ -840,23 +1005,40 @@
       <a class="nav-link" href="#espacement">
         <span class="nav-icon">⬜</span> Spacing, radius & borders
       </a>
-      <a class="nav-sub-link" href="#spacing">Spacing</a>
-      <a class="nav-sub-link" href="#radius">Radius</a>
-      <a class="nav-sub-link" href="#borders">Borders</a>
 
       <a class="nav-link" href="#layout">
         <span class="nav-icon">🗂</span> Layout
       </a>
-      <a class="nav-sub-link" href="#breakpoints">Breakpoints</a>
-      <a class="nav-sub-link" href="#grilles">Grids</a>
 
       <a class="nav-link" href="#typographie">
         <span class="nav-icon">Aa</span> Typography
       </a>
-      <a class="nav-sub-link" href="#headings">Headings</a>
-      <a class="nav-sub-link" href="#body">Body</a>
-      <a class="nav-sub-link" href="#labels">Labels</a>
-      <a class="nav-sub-link" href="#captions">Captions</a>
+
+      <div class="nav-section-label">Components</div>
+
+      <a class="nav-link" href="#buttons">
+        <span class="nav-icon">⬭</span> Button
+      </a>
+
+      <a class="nav-link" href="#link">
+        <span class="nav-icon">↗</span> Link
+      </a>
+
+      <a class="nav-link" href="#tag">
+        <span class="nav-icon">⬬</span> Tag
+      </a>
+
+      <a class="nav-link" href="#card">
+        <span class="nav-icon">▭</span> Card
+      </a>
+
+      <a class="nav-link" href="#input">
+        <span class="nav-icon">☐</span> Input
+      </a>
+
+      <a class="nav-link" href="#icons">
+        <span class="nav-icon">✦</span> Icons
+      </a>
 
       <div class="nav-section-label">Resources</div>
       <a class="nav-link" href="#css-vars">
@@ -870,7 +1052,7 @@
 
     <header class="page-header">
       <h1>Design System<br/>Documentation</h1>
-      <p>Foundations: colors, typography, dimensions, spacing and layout grid.</p>
+      <p>Foundations &amp; Components: colors, typography, dimensions, spacing, layout grid, and UI components.</p>
       <a class="figma-link" href="https://www.figma.com/design/kmPsAmMm4VdXPUCIg8ov5R/Design-System" target="_blank">
         <svg width="14" height="14" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 28.5A9.5 9.5 0 1128.5 19 9.51 9.51 0 0119 28.5z" fill="#1ABCFE"/><path d="M9.5 57A9.5 9.5 0 0119 47.5V57z" fill="#0ACF83"/><path d="M0 38a9.5 9.5 0 019.5-9.5H19V38a9.5 9.5 0 01-19 0z" fill="#A259FF"/><path d="M0 19A9.5 9.5 0 019.5 9.5H19V28.5H9.5A9.5 9.5 0 010 19z" fill="#F24E1E"/><path d="M19 0h9.5A9.5 9.5 0 0128.5 19H19V0z" fill="#FF7262"/></svg>
         Open in Figma
@@ -1477,6 +1659,568 @@
     </section>
 
     <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 6. BUTTON                                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="buttons">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2>Button</h2>
+      </div>
+      <p class="desc">The Button component is the primary action element. It comes in 3 styles, 5 states and 3 sizes. Always use the <strong>label/bold</strong> type style on button text.</p>
+
+      <!-- Styles & States -->
+      <div class="subsection" id="btn-styles">
+        <h3>6.1 Styles &amp; states</h3>
+        <p class="desc">Three visual styles address different levels of emphasis in the interface. Each style has 5 interactive states.</p>
+
+        <div class="variant-group">
+          <div class="variant-label">Primary — for main CTAs</div>
+          <div class="variant-row">
+            <button class="ds-btn ds-btn-md ds-btn-primary">Default</button>
+            <button class="ds-btn ds-btn-md ds-btn-hovered-p">Hovered</button>
+            <button class="ds-btn ds-btn-md ds-btn-pressed-p">Pressed</button>
+            <button class="ds-btn ds-btn-md ds-btn-primary ds-btn-focused">Focused</button>
+            <button class="ds-btn ds-btn-md ds-btn-disabled">Disabled</button>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <div class="variant-label">Secondary — alternative action</div>
+          <div class="variant-row">
+            <button class="ds-btn ds-btn-md ds-btn-secondary">Default</button>
+            <button class="ds-btn ds-btn-md ds-btn-hovered-s">Hovered</button>
+            <button class="ds-btn ds-btn-md ds-btn-pressed-s">Pressed</button>
+            <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-focused">Focused</button>
+            <button class="ds-btn ds-btn-md ds-btn-disabled">Disabled</button>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <div class="variant-label">Ghost — low emphasis action</div>
+          <div class="variant-row">
+            <button class="ds-btn ds-btn-md ds-btn-ghost">Default</button>
+            <button class="ds-btn ds-btn-md ds-btn-hovered-g">Hovered</button>
+            <button class="ds-btn ds-btn-md ds-btn-pressed-g">Pressed</button>
+            <button class="ds-btn ds-btn-md ds-btn-ghost ds-btn-focused">Focused</button>
+            <button class="ds-btn ds-btn-md ds-btn-disabled">Disabled</button>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead>
+            <tr><th>Style</th><th>State</th><th>Background token</th><th>Border token</th><th>Text token</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Primary</td><td>Default</td><td><span class="token-name">color/background/brand/bold/default</span> <span class="hex-value">#FA6048</span></td><td><span class="token-name">color/border/brand/bold/default</span></td><td><span class="token-name">color/text/inverse/bold/default</span> — white</td></tr>
+            <tr><td>Primary</td><td>Hovered</td><td><span class="token-name">color/background/brand/bold/hovered</span> <span class="hex-value">#D0503C</span></td><td><span class="token-name">color/border/brand/bold/hovered</span></td><td>white</td></tr>
+            <tr><td>Primary</td><td>Pressed</td><td><span class="token-name">color/background/brand/bold/pressed</span> <span class="hex-value">#A64030</span></td><td><span class="token-name">color/border/brand/bold/pressed</span></td><td>white</td></tr>
+            <tr><td>Primary</td><td>Disabled</td><td><span class="token-name">color/background/brand/bold/disabled</span> <span class="hex-value">#A39C9B</span></td><td><span class="token-name">color/border/brand/bold/disabled</span></td><td><span class="token-name">color/text/inverse/bold/disabled</span> — rgba(255,255,255,0.5)</td></tr>
+            <tr><td>Secondary</td><td>Default</td><td><span class="token-name">color/background/neutral/subtlest/default</span> <span class="hex-value">#FFFFFF</span></td><td><span class="token-name">color/border/neutral/subtle/default</span></td><td><span class="token-name">color/text/neutral/bold/default</span> — #272323</td></tr>
+            <tr><td>Secondary</td><td>Hovered</td><td><span class="token-name">color/background/neutral/subtle/hovered</span> <span class="hex-value">#D1CDCD</span></td><td><span class="token-name">color/border/neutral/subtle/hovered</span></td><td>#272323</td></tr>
+            <tr><td>Secondary</td><td>Pressed</td><td><span class="token-name">color/background/neutral/subtle/pressed</span> <span class="hex-value">#BAB5B4</span></td><td><span class="token-name">color/border/neutral/subtle/pressed</span></td><td>#272323</td></tr>
+            <tr><td>Ghost</td><td>Default</td><td>transparent</td><td><span class="token-name">color/border/neutral/bold/default</span> <span class="hex-value">#272323</span></td><td><span class="token-name">color/text/neutral/bold/default</span> — #272323</td></tr>
+            <tr><td>Ghost</td><td>Hovered</td><td><span class="token-name">color/background/neutral/subtlest/hovered</span> <span class="hex-value">#E8E6E6</span></td><td>#272323</td><td>#272323</td></tr>
+            <tr><td>Ghost</td><td>Pressed</td><td><span class="token-name">color/background/neutral/subtlest/pressed</span> <span class="hex-value">#D1CDCD</span></td><td>#272323</td><td>#272323</td></tr>
+            <tr><td>All</td><td>Focused</td><td colspan="3">Same as Default + outer outline: <span class="token-name">color/icon/neutral/bold/default</span> 2px, offset 4px, radius full</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sizes -->
+      <div class="subsection" id="btn-sizes">
+        <h3>6.2 Sizes</h3>
+        <div class="variant-row" style="align-items:flex-end;">
+          <div class="variant-group">
+            <div class="variant-label">Large</div>
+            <button class="ds-btn ds-btn-lg ds-btn-primary">Button</button>
+          </div>
+          <div class="variant-group">
+            <div class="variant-label">Medium</div>
+            <button class="ds-btn ds-btn-md ds-btn-primary">Button</button>
+          </div>
+          <div class="variant-group">
+            <div class="variant-label">Small</div>
+            <button class="ds-btn ds-btn-sm ds-btn-primary">Button</button>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Size</th><th>Font size</th><th>Line height</th><th>Padding (V / H)</th><th>Token</th></tr></thead>
+          <tbody>
+            <tr><td>Large</td><td>24 px</td><td>32 px</td><td>20 px / 32 px</td><td><span class="token-name">text/label/bold/large</span></td></tr>
+            <tr><td>Medium</td><td>20 px</td><td>28 px</td><td>16 px / 24 px</td><td><span class="token-name">text/label/bold/medium</span></td></tr>
+            <tr><td>Small</td><td>16 px</td><td>24 px</td><td>12 px / 24 px</td><td><span class="token-name">text/label/bold/small</span></td></tr>
+          </tbody>
+        </table>
+
+        <p class="desc">All sizes share: border-radius <span class="token-name">border-radius/radius-full</span> (999 px) · border-width <span class="token-name">border-width/border-default</span> (2 px) · optional icon 24 × 24 px on left.</p>
+
+        <div class="do-dont-grid">
+          <div class="do-card">
+            <span class="do-dont-badge do-badge">✓ Do</span>
+            <div class="do-dont-preview">
+              <button class="ds-btn ds-btn-md ds-btn-primary">Submit form</button>
+            </div>
+            <p class="do-dont-text">Use Primary for the single main action per view. Keep label short and action-oriented.</p>
+          </div>
+          <div class="dont-card">
+            <span class="do-dont-badge dont-badge">✗ Don't</span>
+            <div class="do-dont-preview">
+              <button class="ds-btn ds-btn-md ds-btn-primary">Submit form</button>
+              <button class="ds-btn ds-btn-md ds-btn-primary">Cancel</button>
+            </div>
+            <p class="do-dont-text">Don't use two Primary buttons side by side — it creates visual ambiguity. Use Secondary or Ghost for the secondary action.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 7. LINK                                      -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="link">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2>Link</h2>
+      </div>
+      <p class="desc">Inline text link with optional left icon. Used for navigation and contextual actions that do not require a full button. Comes in 3 sizes and 5 states matching the Button component.</p>
+
+      <div class="subsection">
+        <h3>7.1 Variants</h3>
+
+        <div class="variant-group">
+          <div class="variant-label">States</div>
+          <div class="variant-row">
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;color:var(--grey-900);text-decoration:none;">Default</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;color:var(--brand-700);text-decoration:none;">Hovered</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;color:var(--brand-800);text-decoration:none;">Pressed</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;color:var(--grey-300);text-decoration:none;cursor:not-allowed;">Disabled</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;color:var(--grey-900);text-decoration:underline;text-underline-offset:3px;">Focused</a>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <div class="variant-label">Sizes</div>
+          <div class="variant-row" style="align-items:baseline;gap:24px;">
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:24px;line-height:32px;color:var(--grey-900);text-decoration:none;">Large — 24px</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:20px;line-height:28px;color:var(--grey-900);text-decoration:none;">Medium — 20px</a>
+            <a href="#" style="font-family:var(--font-sans);font-weight:500;font-size:16px;line-height:24px;color:var(--grey-900);text-decoration:none;">Small — 16px</a>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Property</th><th>Token</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Color (default)</td><td><span class="token-name">color/text/neutral/bold/default</span></td><td><span class="hex-value">#272323</span></td></tr>
+            <tr><td>Color (hovered)</td><td><span class="token-name">color/text/brand/bold/hovered</span></td><td><span class="hex-value">#D0503C</span></td></tr>
+            <tr><td>Color (pressed)</td><td><span class="token-name">color/text/brand/bold/pressed</span></td><td><span class="hex-value">#A64030</span></td></tr>
+            <tr><td>Color (disabled)</td><td><span class="token-name">color/text/neutral/subtle/disabled</span></td><td><span class="hex-value">#A39C9B</span></td></tr>
+            <tr><td>Font (large)</td><td><span class="token-name">text/label/regular/large</span></td><td>Neulis Neue Medium 500, 24 px / 32 px</td></tr>
+            <tr><td>Font (medium)</td><td><span class="token-name">text/label/regular/medium</span></td><td>Neulis Neue Medium 500, 20 px / 28 px</td></tr>
+            <tr><td>Font (small)</td><td><span class="token-name">text/label/regular/small</span></td><td>Neulis Neue Medium 500, 16 px / 24 px</td></tr>
+            <tr><td>Icon (optional)</td><td>—</td><td>24 × 24 px, positioned left, gap 8 px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 8. TAG                                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="tag">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <h2>Tag</h2>
+      </div>
+      <p class="desc">Small pill labels used to categorize content, indicate status, or display metadata. Available in 5 styles and 3 sizes.</p>
+
+      <div class="subsection" id="tag-styles">
+        <h3>8.1 Styles</h3>
+
+        <div class="variant-group">
+          <div class="variant-label">All styles — Large</div>
+          <div class="variant-row">
+            <span class="ds-tag ds-tag-lg ds-tag-default">Default</span>
+            <span class="ds-tag ds-tag-lg ds-tag-bold">Bold</span>
+            <span class="ds-tag ds-tag-lg ds-tag-inverted">Inverted</span>
+            <span class="ds-tag ds-tag-lg ds-tag-ghost">Ghost</span>
+            <span class="ds-tag ds-tag-lg ds-tag-disabled">Disabled</span>
+          </div>
+        </div>
+
+        <div class="variant-group">
+          <div class="variant-label">Sizes — Default style</div>
+          <div class="variant-row" style="align-items:center;gap:16px;">
+            <div style="text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;">
+              <span class="ds-tag ds-tag-lg ds-tag-default">Large</span>
+              <span style="font-size:11px;color:var(--grey-400);">24 px</span>
+            </div>
+            <div style="text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;">
+              <span class="ds-tag ds-tag-md ds-tag-default">Medium</span>
+              <span style="font-size:11px;color:var(--grey-400);">20 px</span>
+            </div>
+            <div style="text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;">
+              <span class="ds-tag ds-tag-sm ds-tag-default">Small</span>
+              <span style="font-size:11px;color:var(--grey-400);">16 px</span>
+            </div>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Style</th><th>Background</th><th>Border</th><th>Text</th></tr></thead>
+          <tbody>
+            <tr><td>Default</td><td><span class="token-name">color/background/brand/subtle/default</span> <span class="hex-value">#FCAFA3</span></td><td><span class="token-name">color/icon/brand/subtle/default</span></td><td><span class="token-name">color/text/neutral/bold/default</span> — #272323</td></tr>
+            <tr><td>Bold</td><td><span class="token-name">color/background/brand/bold/default</span> <span class="hex-value">#FA6048</span></td><td><span class="token-name">color/icon/brand/bold/default</span></td><td><span class="token-name">color/text/inverse/bold/default</span> — white</td></tr>
+            <tr><td>Inverted</td><td><span class="token-name">color/background/neutral/subtle/default</span> <span class="hex-value">#E8E6E6</span></td><td><span class="token-name">color/border/neutral/subtle/default</span></td><td><span class="token-name">color/text/neutral/bold/default</span> — #272323</td></tr>
+            <tr><td>Ghost</td><td>transparent</td><td><span class="token-name">color/border/neutral/bold/default</span> <span class="hex-value">#272323</span></td><td><span class="token-name">color/text/neutral/bold/default</span> — #272323</td></tr>
+            <tr><td>Disabled</td><td><span class="token-name">color/background/neutral/subtle/disabled</span> <span class="hex-value">#E8E6E6</span></td><td><span class="token-name">color/border/neutral/subtle/default</span></td><td><span class="token-name">color/text/neutral/bold/disabled</span> — #756B69</td></tr>
+          </tbody>
+        </table>
+
+        <p class="desc">All tags: border-radius <span class="token-name">border-radius/radius-full</span> (999 px) · border-width <span class="token-name">border-width/border-thin</span> (1 px) · backdrop-filter blur(10 px) · font <span class="token-name">text/label/regular/{size}</span> (Neulis Neue Medium 500).</p>
+
+        <div class="do-dont-grid">
+          <div class="do-card">
+            <span class="do-dont-badge do-badge">✓ Do</span>
+            <div class="do-dont-preview">
+              <span class="ds-tag ds-tag-md ds-tag-default">CASE STUDY</span>
+              <span class="ds-tag ds-tag-md ds-tag-bold">NEW</span>
+            </div>
+            <p class="do-dont-text">Use Default for categories, Bold for high-emphasis labels like "New" or "Featured".</p>
+          </div>
+          <div class="dont-card">
+            <span class="do-dont-badge dont-badge">✗ Don't</span>
+            <div class="do-dont-preview">
+              <span class="ds-tag ds-tag-md ds-tag-disabled">Click me</span>
+            </div>
+            <p class="do-dont-text">Don't use the Disabled style for interactive tags — it signals that the element is non-clickable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 9. CARD                                      -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="card">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <h2>Card</h2>
+      </div>
+      <p class="desc">Content container used to present a project, case study, or article. Composed of an optional image area, a title, body text, and a primary CTA button.</p>
+
+      <div class="subsection">
+        <h3>9.1 Anatomy</h3>
+
+        <div class="comp-preview">
+          <div class="ds-card">
+            <div class="ds-card-img">🖼</div>
+            <div class="ds-card-body">
+              <div class="ds-card-title">Wine learning portal</div>
+              <div class="ds-card-desc">An educational platform featuring lessons, videos, and quizzes to learn about wine.</div>
+              <button class="ds-btn ds-btn-sm ds-btn-primary" style="align-self:flex-start;">Check it out</button>
+            </div>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <table class="token-table">
+              <thead><tr><th>Element</th><th>Token / Spec</th></tr></thead>
+              <tbody>
+                <tr><td>Container border</td><td><span class="token-name">color/border/neutral/subtle/default</span> 2 px · radius 30 px</td></tr>
+                <tr><td>Width</td><td>500 px (fixed)</td></tr>
+                <tr><td>Image area</td><td>218 px height · radius top-left + top-right 30 px</td></tr>
+                <tr><td>Content padding</td><td>top 40 px · sides 32 px · bottom 60 px</td></tr>
+                <tr><td>Gap (content block)</td><td>23 px</td></tr>
+                <tr><td>Title</td><td><span class="token-name">text/heading3/desktop</span> — Extra Bold 32 px / 44 px</td></tr>
+                <tr><td>Description</td><td><span class="token-name">text/body/regular/large</span> — Regular 24 px / 32 px</td></tr>
+                <tr><td>CTA</td><td>Button Medium Primary</td></tr>
+                <tr><td>Background</td><td><span class="token-name">color/background/neutral/subtlest/default</span> — #FFFFFF</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="do-dont-grid">
+          <div class="do-card">
+            <span class="do-dont-badge do-badge">✓ Do</span>
+            <p class="do-dont-text">Always pair the card with an image. The visual creates an immediate entry point and reinforces the brand identity.</p>
+          </div>
+          <div class="dont-card">
+            <span class="do-dont-badge dont-badge">✗ Don't</span>
+            <p class="do-dont-text">Don't truncate the title — let it wrap naturally. Cards have a fixed width of 500 px designed to accommodate 2–3 lines of heading.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 10. INPUT                                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="input">
+      <div class="section-header">
+        <span class="section-number">10</span>
+        <h2>Input</h2>
+      </div>
+      <p class="desc">Form field component with 5 functional styles and 7 interactive states. Uses a floating label pattern when the field is focused or filled.</p>
+
+      <!-- Styles -->
+      <div class="subsection" id="input-styles">
+        <h3>10.1 Styles</h3>
+        <div class="variant-row" style="flex-wrap:wrap;gap:20px;align-items:flex-start;">
+
+          <div class="variant-group">
+            <div class="variant-label">Text</div>
+            <div class="ds-field">
+              <div class="ds-input-box"><span class="ds-input-title">Title</span></div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Password</div>
+            <div class="ds-field">
+              <div class="ds-input-box">
+                <span class="ds-input-title">Title</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="color:var(--grey-500);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+              </div>
+              <span class="ds-input-helper" style="text-decoration:underline;">Forgotten password?</span>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Dropdown</div>
+            <div class="ds-field">
+              <div class="ds-input-box">
+                <span class="ds-input-title">Title</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="color:var(--grey-500);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Search</div>
+            <div class="ds-field">
+              <div class="ds-input-box">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="color:var(--grey-500);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+                <span class="ds-input-title" style="color:var(--grey-400);">Search</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Large Text</div>
+            <div class="ds-field">
+              <div class="ds-input-box" style="height:120px;align-items:flex-start;padding-top:12px;">
+                <span class="ds-input-title">Title</span>
+              </div>
+              <span class="ds-input-helper">0/200 characters</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- States -->
+      <div class="subsection" id="input-states">
+        <h3>10.2 States</h3>
+        <div class="variant-row" style="flex-wrap:wrap;gap:16px;align-items:flex-start;">
+
+          <div class="variant-group">
+            <div class="variant-label">Default</div>
+            <div class="ds-field">
+              <div class="ds-input-box"><span class="ds-input-title">Title</span></div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Hovered</div>
+            <div class="ds-field">
+              <div class="ds-input-box hovered"><span class="ds-input-title">Title</span></div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Focused</div>
+            <div class="ds-field">
+              <div class="ds-input-box focused" style="position:relative;padding-top:18px;">
+                <span style="position:absolute;top:5px;left:14px;font-size:10px;line-height:1;color:var(--grey-400);">Title</span>
+                <span class="ds-input-title" style="color:var(--grey-700);">|</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Typing</div>
+            <div class="ds-field">
+              <div class="ds-input-box focused" style="position:relative;padding-top:18px;">
+                <span style="position:absolute;top:5px;left:14px;font-size:10px;line-height:1;color:var(--grey-400);">Title</span>
+                <span class="ds-input-title">Text |</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Error / Empty</div>
+            <div class="ds-field">
+              <div class="ds-input-box error" style="position:relative;padding-top:18px;">
+                <span style="position:absolute;top:5px;left:14px;font-size:10px;line-height:1;color:var(--grey-400);">Title</span>
+                <span class="ds-input-title">Text |</span>
+              </div>
+              <span class="ds-input-errtext">Error</span>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Disabled</div>
+            <div class="ds-field">
+              <div class="ds-input-box disabled"><span class="ds-input-title" style="color:var(--grey-400);">Title</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>State</th><th>Border token</th><th>Value</th><th>Background</th></tr></thead>
+          <tbody>
+            <tr><td>Default</td><td><span class="token-name">color/border/neutral/subtle/default</span></td><td><span class="hex-value">#D1CDCD</span></td><td>white</td></tr>
+            <tr><td>Hovered</td><td><span class="token-name">color/border/neutral/subtle/hovered</span></td><td><span class="hex-value">#BAB5B4</span></td><td>white</td></tr>
+            <tr><td>Focused / Typing</td><td><span class="token-name">color/border/neutral/bold/default</span></td><td><span class="hex-value">#272323</span></td><td>white</td></tr>
+            <tr><td>Error / Empty</td><td><span class="token-name">color/border/danger/bold/default</span></td><td><span class="hex-value">#D73325</span></td><td>white</td></tr>
+            <tr><td>Disabled</td><td><span class="token-name">color/border/neutral/subtle/disabled</span></td><td><span class="hex-value">#BAB5B4</span></td><td><span class="token-name">color/background/neutral/subtlest/disabled</span> <span class="hex-value">#E8E6E6</span></td></tr>
+          </tbody>
+        </table>
+
+        <p class="desc">Structure: border-radius <span class="token-name">border-radius/radius-sm</span> (4 px) · border-width <span class="token-name">border-width/border-thin</span> (1 px) · padding 12 px × 16 px. Label uses floating pattern: full size (<span class="token-name">text/body/regular/small</span>) when empty, shrinks to <span class="token-name">text/caption/small</span> (10 px, grey/500) when focused or filled. Error text: <span class="token-name">text/caption/medium</span> (12 px) in <span class="token-name">color/text/danger/bold/default</span>.</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 11. ICONS                                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="section" id="icons">
+      <div class="section-header">
+        <span class="section-number">11</span>
+        <h2>Icons</h2>
+      </div>
+      <p class="desc">Icon library with 22 icons available in 3 sizes (Large 24 px, Medium 20 px, Small 16 px). Icons are SVG-based components designed on a 24 × 24 px grid with consistent stroke weight.</p>
+
+      <div class="subsection">
+        <h3>12.1 Icon set</h3>
+
+        <table class="token-table" style="margin-bottom:24px;">
+          <thead><tr><th>Size</th><th>Dimensions</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td>Large</td><td>24 × 24 px</td><td>Buttons, topbar, primary UI elements</td></tr>
+            <tr><td>Medium</td><td>20 × 20 px</td><td>Secondary actions, form fields (eye, chevron)</td></tr>
+            <tr><td>Small</td><td>16 × 16 px</td><td>Inline text, badges, compact lists</td></tr>
+          </tbody>
+        </table>
+
+        <div class="icon-grid">
+          <div class="icon-card" onclick="copyToken('user')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+            <div class="icon-name">user</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('Tool')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" /></svg>
+            <div class="icon-name">Tool</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('cal')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+            <div class="icon-name">cal</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('Clock')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            <div class="icon-name">Clock</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('research')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>
+            <div class="icon-name">research</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('chat')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V20.25L9 18" /></svg>
+            <div class="icon-name">chat</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('id')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" /></svg>
+            <div class="icon-name">id</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('search')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            <div class="icon-name">search</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('share')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" /></svg>
+            <div class="icon-name">share</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('frames')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" /></svg>
+            <div class="icon-name">frames</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('user-circle')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+            <div class="icon-name">user-circle</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('pen')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+            <div class="icon-name">pen</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('brush')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" /></svg>
+            <div class="icon-name">brush</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('scale')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99.203 1.99.377 3 .52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 5.491Z" /></svg>
+            <div class="icon-name">scale</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('shop')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+            <div class="icon-name">shop</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('arrow-left')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+            <div class="icon-name">arrow-left</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('burger')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            <div class="icon-name">burger</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('x-mark')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+            <div class="icon-name">x-mark</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('chevron-down')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            <div class="icon-name">chevron-down</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('Eye')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+            <div class="icon-name">Eye</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('eye-slash')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+            <div class="icon-name">eye-slash</div>
+          </div>
+          <div class="icon-card" onclick="copyToken('Leave')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            <div class="icon-name">Leave</div>
+          </div>
+        </div>
+
+        <p class="desc" style="margin-top:16px;">Click an icon to copy its name. Icons are exported from Figma as individual SVG components. To use: import the icon component matching the desired size (Large / Medium / Small) and apply color via <span class="token-name">color/icon/*</span> tokens or inherit from the parent text color.</p>
+
+        <div class="do-dont-grid" style="margin-top:8px;">
+          <div class="do-card">
+            <span class="do-dont-badge do-badge">✓ Do</span>
+            <p class="do-dont-text">Always use the size that matches the surrounding context (Large in buttons, Medium in inputs). Apply a single semantic color token to the icon fill.</p>
+          </div>
+          <div class="dont-card">
+            <span class="do-dont-badge dont-badge">✗ Don't</span>
+            <p class="do-dont-text">Don't scale icons by CSS transform — always use the correct size variant (Large / Medium / Small). Don't use raw hex values for icon color; use semantic tokens.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- APPENDIX — CSS VARS                         -->
