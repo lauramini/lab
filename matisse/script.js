@@ -439,7 +439,7 @@ btnCloseEditMobile.addEventListener('click', deselect);
 // quand la forme est déjà devant). Classe ajoutée puis retirée deux frames
 // plus tard pour laisser peindre l'état "flash" avant que la transition CSS
 // ne le fasse s'estomper.
-var editActionButtons = [
+var tapFlashButtons = [
   document.getElementById('panel-color'),
   document.getElementById('panel-front'),
   document.getElementById('panel-back'),
@@ -448,8 +448,11 @@ var editActionButtons = [
   document.getElementById('panel-front-mobile'),
   document.getElementById('panel-back-mobile'),
   document.getElementById('panel-delete-mobile'),
+  btnNewShapeMobile,
+  document.getElementById('btn-erase-mobile'),
+  document.getElementById('btn-download-mobile'),
 ];
-editActionButtons.forEach(function (btn) {
+tapFlashButtons.forEach(function (btn) {
   btn.addEventListener('click', function () {
     btn.classList.add('is-tapped');
     requestAnimationFrame(function () {
@@ -507,7 +510,7 @@ selFrame.querySelectorAll('.sel-handle').forEach(function (handle) {
     var dy = active.y - anchor.y;
     var len = Math.sqrt(dx * dx + dy * dy); // diagonale courante = size * sqrt(2)
 
-    resize = { anchor: anchor, axisX: dx / len, axisY: dy / len };
+    resize = { pointerId: e.pointerId, anchor: anchor, axisX: dx / len, axisY: dy / len };
     document.documentElement.style.cursor = handle.style.cursor;
   });
 });
@@ -562,6 +565,7 @@ rotateHandle.addEventListener('pointerdown', function (e) {
   var cy = parseFloat(selected.style.top)  + selected.offsetHeight / 2;
 
   rotation = {
+    pointerId:     e.pointerId,
     cx:            cx,
     cy:            cy,
     startAngle:    Math.atan2(my - cy, mx - cx) * 180 / Math.PI,
@@ -580,8 +584,75 @@ var dragStartY     = 0;
 var dragMoved      = false;
 var DRAG_THRESHOLD = 4;
 
+// ═══════════════════════════════════════════
+// GESTE TACTILE À DEUX DOIGTS — pincer-zoomer + rotation
+// ═══════════════════════════════════════════
+//
+// Un doigt pose et déplace la forme (drag classique ci-dessous). Dès qu'un
+// second doigt se pose pendant ce drag, on bascule sur ce geste combiné :
+// l'écart entre les deux doigts pilote la taille, l'angle entre eux pilote
+// la rotation — les deux à la fois, comme le pinch d'une photo sur iPhone.
+// Le centre de la forme reste fixe pendant tout le geste (même point
+// d'ancrage que la poignée de rotation ; le pincer-zoomer est proportionnel,
+// comme les poignées de coin).
+//
+// `touchPoints` ne suit que les doigts posés sur #canvas (pas ceux sur les
+// poignées, qui ont leur propre logique mono-doigt plus haut) afin de savoir,
+// à l'arrivée d'un 2e doigt, où se trouve déjà le 1er.
+
+var touchPoints = new Map(); // pointerId -> {x, y} en coordonnées canvas
+var pinch       = null;      // { idA, idB, initialDist, initialAngle, initialSize, initialRotation, cx, cy }
+
+function canvasPoint(e) {
+  var r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function twoFingerGeometry(a, b) {
+  var dx = b.x - a.x;
+  var dy = b.y - a.y;
+  return {
+    dist:  Math.sqrt(dx * dx + dy * dy),
+    angle: Math.atan2(dy, dx) * 180 / Math.PI,
+  };
+}
+
+function startPinch() {
+  // Le drag mono-doigt s'arrête net, sans saut : la forme reste où elle est.
+  if (drag) {
+    drag.el.classList.remove('dragging');
+    drag = null;
+    dragMoved = false;
+  }
+
+  var ids = Array.from(touchPoints.keys());
+  var geo = twoFingerGeometry(touchPoints.get(ids[0]), touchPoints.get(ids[1]));
+
+  pinch = {
+    idA: ids[0],
+    idB: ids[1],
+    initialDist:     geo.dist,
+    initialAngle:    geo.angle,
+    initialSize:     selected.offsetWidth,
+    initialRotation: parseFloat(selected.dataset.rotation || '0'),
+    cx: parseFloat(selected.style.left) + selected.offsetWidth  / 2,
+    cy: parseFloat(selected.style.top)  + selected.offsetHeight / 2,
+  };
+}
+
 canvas.addEventListener('pointerdown', function (e) {
   if (e.target.closest('#edit-panel-desktop')) return;
+
+  // Un 3e doigt (ou plus) pendant un pincer-zoomer en cours : ignoré.
+  if (pinch) return;
+
+  // 2e doigt posé pendant un drag mono-doigt en cours : bascule en pincer-zoomer.
+  if (drag && selected && touchPoints.size === 1) {
+    e.preventDefault();
+    touchPoints.set(e.pointerId, canvasPoint(e));
+    startPinch();
+    return;
+  }
 
   var shape = e.target.closest('.canvas-shape');
   if (!shape) {
@@ -593,6 +664,8 @@ canvas.addEventListener('pointerdown', function (e) {
   if (selected && selected !== shape) deselect();
 
   e.preventDefault();
+  touchPoints.clear();
+  touchPoints.set(e.pointerId, canvasPoint(e));
   dragStartX = e.clientX;
   dragStartY = e.clientY;
   dragMoved  = false;
@@ -603,6 +676,7 @@ canvas.addEventListener('pointerdown', function (e) {
   var canvasRect = canvas.getBoundingClientRect();
   drag = {
     el:           shape,
+    pointerId:    e.pointerId,
     offsetX:      e.clientX - canvasRect.left - parseFloat(shape.style.left),
     offsetY:      e.clientY - canvasRect.top  - parseFloat(shape.style.top),
     originalLeft: shape.style.left,
@@ -612,8 +686,37 @@ canvas.addEventListener('pointerdown', function (e) {
 });
 
 document.addEventListener('pointermove', function (e) {
+  if (touchPoints.has(e.pointerId)) touchPoints.set(e.pointerId, canvasPoint(e));
+
+  // ── Pincer-zoomer + rotation à deux doigts ──
+  if (pinch) {
+    if (e.pointerId !== pinch.idA && e.pointerId !== pinch.idB) return;
+
+    var pA = touchPoints.get(pinch.idA);
+    var pB = touchPoints.get(pinch.idB);
+    if (!pA || !pB) return;
+
+    var geo    = twoFingerGeometry(pA, pB);
+    var scale  = geo.dist / pinch.initialDist;
+    var size   = Math.max(pinch.initialSize * scale, MIN_SHAPE_SIZE);
+    var newRot = pinch.initialRotation + (geo.angle - pinch.initialAngle);
+
+    selected.style.width      = size + 'px';
+    selected.style.height     = size + 'px';
+    selected.style.left       = (pinch.cx - size / 2) + 'px';
+    selected.style.top        = (pinch.cy - size / 2) + 'px';
+    selected.dataset.rotation = newRot;
+    selected.style.transform  = 'rotate(' + newRot + 'deg)';
+
+    // Le panneau d'édition reste figé pendant le geste, comme pour la
+    // rotation à la poignée — recalcul complet seulement au relâchement.
+    updateSelFrame();
+    return;
+  }
+
   // ── Rotation ──
   if (rotation) {
+    if (e.pointerId !== rotation.pointerId) return;
     var canvasRect = canvas.getBoundingClientRect();
     var mx    = e.clientX - canvasRect.left;
     var my    = e.clientY - canvasRect.top;
@@ -628,6 +731,7 @@ document.addEventListener('pointermove', function (e) {
 
   // ── Resize ──
   if (resize) {
+    if (e.pointerId !== resize.pointerId) return;
     var canvasRect = canvas.getBoundingClientRect();
     var mx = e.clientX - canvasRect.left;
     var my = e.clientY - canvasRect.top;
@@ -651,7 +755,7 @@ document.addEventListener('pointermove', function (e) {
   }
 
   // ── Drag ──
-  if (!drag) return;
+  if (!drag || e.pointerId !== drag.pointerId) return;
 
   var canvasRect = canvas.getBoundingClientRect();
   drag.el.style.left = (e.clientX - canvasRect.left - drag.offsetX) + 'px';
@@ -670,8 +774,37 @@ document.addEventListener('pointermove', function (e) {
   }
 });
 
-document.addEventListener('pointerup', function () {
+function endPointer(e) {
+  touchPoints.delete(e.pointerId);
+
+  if (pinch) {
+    if (e.pointerId !== pinch.idA && e.pointerId !== pinch.idB) return;
+
+    pinch = null;
+    decideEditPanelPlacement();
+
+    // S'il reste un doigt posé, reprendre le déplacement simple à partir de
+    // sa position actuelle — pas de saut, la forme ne bouge pas au relâchement
+    // du 2e doigt.
+    var remainingId = Array.from(touchPoints.keys())[0];
+    if (remainingId !== undefined && selected) {
+      var p = touchPoints.get(remainingId);
+      drag = {
+        el:           selected,
+        pointerId:    remainingId,
+        offsetX:      p.x - parseFloat(selected.style.left),
+        offsetY:      p.y - parseFloat(selected.style.top),
+        originalLeft: selected.style.left,
+        originalTop:  selected.style.top,
+      };
+      dragMoved = true; // le geste a déjà "bougé" la forme (taille/rotation) : pas de recalage au relâchement
+      selected.classList.add('dragging');
+    }
+    return;
+  }
+
   if (rotation) {
+    if (e.pointerId !== rotation.pointerId) return;
     rotation = null;
     document.documentElement.style.cursor = '';
     decideEditPanelPlacement();
@@ -679,13 +812,14 @@ document.addEventListener('pointerup', function () {
   }
 
   if (resize) {
+    if (e.pointerId !== resize.pointerId) return;
     resize = null;
     document.documentElement.style.cursor = '';
     decideEditPanelPlacement();
     return;
   }
 
-  if (!drag) return;
+  if (!drag || e.pointerId !== drag.pointerId) return;
   drag.el.classList.remove('dragging');
 
   if (!dragMoved) {
@@ -697,7 +831,10 @@ document.addEventListener('pointerup', function () {
 
   drag      = null;
   dragMoved = false;
-});
+}
+
+document.addEventListener('pointerup',     endPointer);
+document.addEventListener('pointercancel', endPointer);
 
 // ═══════════════════════════════════════════
 // TÉLÉCHARGEMENT DU COLLAGE

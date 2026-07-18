@@ -173,6 +173,9 @@ body {
 #canvas {
   position: absolute;
   inset: 0;
+  /* Empêche le pincer-zoomer natif du navigateur : le geste à deux doigts
+     sur une forme sélectionnée est entièrement piloté en JS. */
+  touch-action: none;
 }
 
 .canvas-shape {
@@ -636,14 +639,15 @@ body {
 
 .mobile-menu-btn.active { font-weight: 500; }
 
-/* Flash bref au tap sur les boutons d'action du panneau d'édition mobile
-   (couleur/premier plan/arrière-plan/suppression) — voir .edit-btn.is-tapped. */
-#edit-row-mobile .mobile-menu-btn {
+/* Flash bref au tap : confirme que l'action a été reçue, même quand elle n'a
+   pas d'effet visuel immédiat (menu principal et panneau d'édition mobile) —
+   voir .edit-btn.is-tapped. */
+.mobile-menu-btn {
   border-radius: 8px;
   transition: background-color 0.18s ease;
 }
 
-#edit-row-mobile .mobile-menu-btn.is-tapped {
+.mobile-menu-btn.is-tapped {
   background-color: var(--grey-100);
   transition: none;
 }
