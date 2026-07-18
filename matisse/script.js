@@ -81,7 +81,7 @@ function buildShapeTile(index) {
   const btn = document.createElement('button');
   btn.className = 'shape-tile';
   btn.title = 'Forme ' + (index + 1);
-  btn.innerHTML = '<img src="shapes/shape-' + (index + 1) + '.svg" alt="Forme ' + (index + 1) + '">';
+  btn.innerHTML = '<img src="/matisse/shapes/shape-' + (index + 1) + '.svg" alt="Forme ' + (index + 1) + '">';
   btn.addEventListener('click', function () { addShapeToCanvas(index); });
   return btn;
 }

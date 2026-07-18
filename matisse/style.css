@@ -210,7 +210,7 @@ body {
 .canvas-placeholder-bg {
   position: absolute;
   inset: 0;
-  background-image: url('Elements/Matisse-placeholder.svg');
+  background-image: url('/matisse/Elements/Matisse-placeholder.svg');
   background-size: 488px 549px; /* taille réelle du SVG, jamais agrandie/rétrécie */
   background-position: center;
   background-repeat: no-repeat;
