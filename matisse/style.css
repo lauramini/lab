@@ -179,6 +179,7 @@ body {
   position: absolute;
   cursor: grab;
   user-select: none;
+  touch-action: none;
 }
 
 .canvas-shape.dragging {
@@ -245,6 +246,7 @@ body {
   background: var(--grey-50);
   border: 1px solid var(--grey-900);
   pointer-events: all; /* les poignées restent cliquables même si le cadre ne l'est pas */
+  touch-action: none;
 }
 
 .sel-tl { top: -3px;    left: -3px;  cursor: nwse-resize; }
@@ -286,6 +288,7 @@ body {
   padding: 0;
   color: var(--grey-900);
   pointer-events: all;
+  touch-action: none;
 }
 
 /* ── Panneau d'édition desktop (flottant, positionné par JS) ── */
@@ -336,6 +339,14 @@ body {
   font-size: 12px;
   line-height: 16px;
   color: var(--grey-900);
+  transition: background-color 0.18s ease;
+}
+
+/* Flash bref au tap/clic : confirme visuellement que l'action a été reçue,
+   même quand elle n'a pas d'effet immédiat visible sur la toile. */
+.edit-btn.is-tapped {
+  background-color: var(--grey-100);
+  transition: none;
 }
 
 .edit-btn--color { padding: 4px 12px; }
@@ -582,7 +593,7 @@ body {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 20px 0 20px 40px;
+  padding: 20px 40px;
   background: rgba(255, 255, 255, 0.8);
   border-top: 1px solid var(--grey-100);
 }
@@ -624,6 +635,18 @@ body {
 }
 
 .mobile-menu-btn.active { font-weight: 500; }
+
+/* Flash bref au tap sur les boutons d'action du panneau d'édition mobile
+   (couleur/premier plan/arrière-plan/suppression) — voir .edit-btn.is-tapped. */
+#edit-row-mobile .mobile-menu-btn {
+  border-radius: 8px;
+  transition: background-color 0.18s ease;
+}
+
+#edit-row-mobile .mobile-menu-btn.is-tapped {
+  background-color: var(--grey-100);
+  transition: none;
+}
 
 .icon-toggle-plus .icon-plus-full { display: none; }
 .icon-toggle-plus.is-open .icon-plus      { display: none; }
@@ -668,9 +691,9 @@ body {
   border-top: 1px solid var(--grey-100);
 }
 
-#panel-color-mobile .icon-color-full { display: none; }
-#panel-color-mobile.is-open .icon-color      { display: none; }
-#panel-color-mobile.is-open .icon-color-full { display: block; }
+#panel-color-mobile .icon-color      { display: none; }
+#panel-color-mobile.is-open .icon-color-full { display: none; }
+#panel-color-mobile.is-open .icon-color      { display: block; }
 #panel-color-mobile.is-open span:last-child  { font-weight: 600; }
 
 @media (max-width: 768px) {

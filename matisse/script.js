@@ -182,12 +182,15 @@ var mobileTray        = document.getElementById('shape-grid-mobile');
 var btnNewShapeMobile = document.getElementById('btn-new-shape-mobile');
 var iconTogglePlus    = btnNewShapeMobile.querySelector('.icon-toggle-plus');
 
-btnNewShapeMobile.addEventListener('click', function () {
-  mobileTray.hidden = !mobileTray.hidden;
-  var open = !mobileTray.hidden;
+function setMobileTrayOpen(open) {
+  mobileTray.hidden = !open;
   btnNewShapeMobile.classList.toggle('active', open);
   btnNewShapeMobile.setAttribute('aria-expanded', open ? 'true' : 'false');
   iconTogglePlus.classList.toggle('is-open', open);
+}
+
+btnNewShapeMobile.addEventListener('click', function () {
+  setMobileTrayOpen(mobileTray.hidden);
 });
 
 // ═══════════════════════════════════════════
@@ -431,9 +434,33 @@ document.getElementById('panel-back-mobile').addEventListener('click', sendToBac
 document.getElementById('panel-delete-mobile').addEventListener('click', deleteSelected);
 btnCloseEditMobile.addEventListener('click', deselect);
 
+// Flash bref du fond au tap/clic : confirme que l'action a été reçue, même
+// quand elle n'a pas d'effet visuel immédiat sur la toile (ex. premier plan
+// quand la forme est déjà devant). Classe ajoutée puis retirée deux frames
+// plus tard pour laisser peindre l'état "flash" avant que la transition CSS
+// ne le fasse s'estomper.
+var editActionButtons = [
+  document.getElementById('panel-color'),
+  document.getElementById('panel-front'),
+  document.getElementById('panel-back'),
+  document.getElementById('panel-delete'),
+  document.getElementById('panel-color-mobile'),
+  document.getElementById('panel-front-mobile'),
+  document.getElementById('panel-back-mobile'),
+  document.getElementById('panel-delete-mobile'),
+];
+editActionButtons.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    btn.classList.add('is-tapped');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { btn.classList.remove('is-tapped'); });
+    });
+  });
+});
+
 // Empêche un clic sur le panneau d'édition de désélectionner
-editPanelDesktop.addEventListener('mousedown', function (e) { e.stopPropagation(); });
-editPanelMobile.addEventListener('mousedown',  function (e) { e.stopPropagation(); });
+editPanelDesktop.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+editPanelMobile.addEventListener('pointerdown',  function (e) { e.stopPropagation(); });
 
 // Note : pas d'écouteur « clic à l'extérieur » séparé pour fermer les
 // couleurs — désélectionner (clic sur le fond du canvas) ou sélectionner une
@@ -460,7 +487,7 @@ var resize         = null; // { signX, signY, anchorX, anchorY }
 var MIN_SHAPE_SIZE = 40;
 
 selFrame.querySelectorAll('.sel-handle').forEach(function (handle) {
-  handle.addEventListener('mousedown', function (e) {
+  handle.addEventListener('pointerdown', function (e) {
     if (!selected) return;
     e.preventDefault();
     e.stopPropagation();
@@ -523,7 +550,7 @@ function cornerPositions(shape) {
 var rotateHandle = selFrame.querySelector('.sel-rotate');
 rotateHandle.style.cursor = ROTATE_CURSOR;
 
-rotateHandle.addEventListener('mousedown', function (e) {
+rotateHandle.addEventListener('pointerdown', function (e) {
   if (!selected) return;
   e.preventDefault();
   e.stopPropagation();
@@ -553,12 +580,13 @@ var dragStartY     = 0;
 var dragMoved      = false;
 var DRAG_THRESHOLD = 4;
 
-canvas.addEventListener('mousedown', function (e) {
+canvas.addEventListener('pointerdown', function (e) {
   if (e.target.closest('#edit-panel-desktop')) return;
 
   var shape = e.target.closest('.canvas-shape');
   if (!shape) {
     deselect();
+    if (!mobileTray.hidden) setMobileTrayOpen(false);
     return;
   }
 
@@ -583,7 +611,7 @@ canvas.addEventListener('mousedown', function (e) {
   shape.classList.add('dragging');
 });
 
-document.addEventListener('mousemove', function (e) {
+document.addEventListener('pointermove', function (e) {
   // ── Rotation ──
   if (rotation) {
     var canvasRect = canvas.getBoundingClientRect();
@@ -642,7 +670,7 @@ document.addEventListener('mousemove', function (e) {
   }
 });
 
-document.addEventListener('mouseup', function () {
+document.addEventListener('pointerup', function () {
   if (rotation) {
     rotation = null;
     document.documentElement.style.cursor = '';
